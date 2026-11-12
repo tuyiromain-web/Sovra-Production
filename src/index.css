@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  /* Modern Sovra Sapphire & Electric Blue Palette */
+  --color-brand-blue: #0284C7;
+  --color-brand-blue-light: #38BDF8;
+  --color-brand-blue-dark: #0369A1;
+  --color-brand-indigo: #4F46E5;
+  --color-brand-cyan: #06B6D4;
+  --color-brand-pink: #EC407A;
+  --color-brand-purple: #8B5CF6;
+  --color-brand-green: #10B981;
+  --color-brand-gold: #F59E0B;
+
+  /* Backward compatibility aliases mapping legacy orange tokens cleanly to vibrant blues */
+  --color-brand-orange: #0284C7;
+  --color-brand-orange-light: #38BDF8;
+  --color-brand-orange-dark: #0369A1;
+
+  --color-dark-bg: #070B14;
+  --color-dark-surface: #0E1626;
+  --color-dark-surface-2: #131E35;
+  --color-dark-surface-3: #182642;
+  --color-dark-card: #0F1A2E;
+  --color-dark-border: rgba(255, 255, 255, 0.08);
+  --color-dark-border-hover: rgba(56, 189, 248, 0.4);
+  
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: #070B14;
+  color: #F8FAFC;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbars in Blue */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #080D18;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E2D4A;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0284C7;
+}
+
+@layer utilities {
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 16px rgba(2, 132, 199, 0.25); }
+    50% { box-shadow: 0 0 28px rgba(56, 189, 248, 0.5); }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Blue Glows */
+  .glow-blue {
+    box-shadow: 0 0 24px rgba(2, 132, 199, 0.35);
+  }
+
+  .glow-blue-sm {
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+  }
+
+  .glow-orange {
+    box-shadow: 0 0 24px rgba(2, 132, 199, 0.35);
+  }
+
+  .glow-orange-sm {
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 18px rgba(139, 92, 246, 0.25);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 18px rgba(16, 185, 129, 0.25);
+  }
+
+  .glow-pink {
+    box-shadow: 0 0 18px rgba(236, 64, 122, 0.25);
+  }
+
+  /* High-Fidelity Glassmorphism */
+  .bg-glass {
+    background: rgba(14, 22, 38, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .bg-glass-card {
+    background: rgba(15, 26, 46, 0.65);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+  }
+
+  .bg-glass-panel {
+    background: rgba(10, 17, 31, 0.78);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(56, 189, 248, 0.15);
+  }
+
+  /* Modern Sapphire Gradient Buttons */
+  .blue-gradient-btn {
+    background: linear-gradient(135deg, #0284C7 0%, #38BDF8 100%);
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+  }
+
+  .blue-gradient-btn:hover {
+    background: linear-gradient(135deg, #0369A1 0%, #0284C7 100%);
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.45);
+  }
+
+  .orange-gradient-btn {
+    background: linear-gradient(135deg, #0284C7 0%, #38BDF8 100%);
+    color: #FFFFFF;
+  }
+
+  .orange-gradient-btn:hover {
+    background: linear-gradient(135deg, #0369A1 0%, #0284C7 100%);
+    box-shadow: 0 4px 20px rgba(2, 132, 199, 0.45);
+  }
+}

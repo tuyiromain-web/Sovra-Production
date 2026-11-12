@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <!-- Background / Aura Gradients -->
+    <radialGradient id="sovraGlow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#0284C7" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#0369A1" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="primaryShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="45%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <linearGradient id="accentCyanGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#60A5FA"/>
+    </linearGradient>
+    <linearGradient id="glassFacet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#0284C7" stop-opacity="0.18"/>
+    </linearGradient>
+    <linearGradient id="glassBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#38BDF8" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#1D4ED8" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="coreBookGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#F0F9FF"/>
+      <stop offset="100%" stop-color="#BAE6FD"/>
+    </linearGradient>
+    <filter id="glassShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#0284C7" flood-opacity="0.45"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Ambient Glow -->
+  <circle cx="256" cy="256" r="230" fill="url(#sovraGlow)"/>
+
+  <!-- Outer Glassmorphic Rounded Hexagon Base -->
+  <g filter="url(#glassShadow)">
+    <path d="M 256,44 
+             L 436,136 
+             L 436,376 
+             L 256,468 
+             L 76,376 
+             L 76,136 Z" 
+          fill="#0B132B" fill-opacity="0.75" 
+          stroke="url(#glassBorder)" stroke-width="4" stroke-linejoin="round"/>
+    
+    <!-- Glass Facet Highlight (Diagonal Sheen) -->
+    <path d="M 256,46 
+             L 434,137 
+             L 256,256 
+             L 78,137 Z" 
+          fill="url(#glassFacet)"/>
+  </g>
+
+  <!-- Dynamic Interlocking 'S' & Academic Open Book Core Structure -->
+  <!-- Upper 'S' Arc / Knowledge Crest -->
+  <path d="M 180,186 
+           C 180,140 220,118 266,118 
+           C 316,118 352,146 352,188 
+           C 352,228 320,246 270,258 
+           L 242,264 
+           C 192,276 160,296 160,336 
+           C 160,378 196,406 246,406 
+           C 292,406 332,382 332,342" 
+        stroke="url(#primaryShieldGrad)" 
+        stroke-width="32" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        fill="none"/>
+
+  <!-- Lower Counter-Fold Accent (Cyan-Electric Spark) -->
+  <path d="M 256,236 L 290,258 L 256,280 L 222,258 Z" 
+        fill="url(#accentCyanGrad)"/>
+
+  <!-- Academic Diamond Cap Node (Top Peak) -->
+  <polygon points="256,86 280,102 256,118 232,102" 
+           fill="#38BDF8" 
+           filter="drop-shadow(0 0 10px #38BDF8)"/>
+
+  <!-- Connected Learning Nodes (Network Topology Representation) -->
+  <circle cx="152" cy="226" r="10" fill="#38BDF8" stroke="#FFFFFF" stroke-width="2.5"/>
+  <circle cx="360" cy="286" r="10" fill="#60A5FA" stroke="#FFFFFF" stroke-width="2.5"/>
+  <circle cx="256" cy="360" r="8" fill="#BAE6FD" stroke="#0284C7" stroke-width="2"/>
+
+  <!-- Subtle Network Ray Interconnects -->
+  <line x1="162" y1="226" x2="222" y2="258" stroke="#38BDF8" stroke-width="2" stroke-dasharray="4 4" stroke-opacity="0.6"/>
+  <line x1="290" y1="258" x2="350" y2="286" stroke="#60A5FA" stroke-width="2" stroke-dasharray="4 4" stroke-opacity="0.6"/>
+
+  <!-- Center Core Star / Wisdom Beacon -->
+  <circle cx="256" cy="258" r="5" fill="#FFFFFF"/>
+</svg>
