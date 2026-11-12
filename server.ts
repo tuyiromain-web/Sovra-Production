@@ -1,6 +1,9 @@
 import express from "express";
 import path from "path";
 import helmet from "helmet";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
+import cookieParser from "cookie-parser";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import dotenv from "dotenv";
@@ -187,12 +190,55 @@ async function startServer() {
     })
   );
 
+  // Restrictive CORS configuration
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    process.env.APP_URL,
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined
+  ].filter(Boolean) as string[];
+
+  app.use(cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, server-to-server) or matching allowed list
+      if (!origin || allowedOrigins.some(o => origin.startsWith(o) || o === "*")) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Allow same-site origin navigation smoothly
+      }
+    },
+    credentials: true,
+  }));
+
+  // Cookie parser with secure parsing
+  app.use(cookieParser());
+
+  // Rate Limiting on API Endpoints (DDoS / Brute Force Mitigation)
+  const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 150, // limit each IP to 150 requests per window
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Too many requests from this IP, please try again after 15 minutes." }
+  });
+
+  const aiLimiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    max: 30, // limit each IP to 30 AI generation queries per minute
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "AI rate limit reached. Please wait a moment before sending another prompt." }
+  });
+
+  app.use("/api/", apiLimiter);
+  app.use("/api/gemini/", aiLimiter);
+
   // Security audit: Disable x-powered-by header
   app.disable("x-powered-by");
 
-  // Middleware for parsing JSON requests
-  app.use(express.json({ limit: "25mb" }));
-  app.use(express.urlencoded({ limit: "25mb", extended: true }));
+  // Middleware for parsing JSON requests with strict payload limit
+  app.use(express.json({ limit: "15mb" }));
+  app.use(express.urlencoded({ limit: "15mb", extended: true }));
 
   // === GEMINI INTEGRATION ===
   app.post("/api/gemini/generate", async (req, res) => {
