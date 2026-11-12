@@ -191,9 +191,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
             <div className="lg:col-span-6 space-y-6 sm:space-y-8">
               
               <div className="inline-flex items-center gap-2">
-                <span className="font-display text-4xl sm:text-6xl lg:text-7xl leading-[1.04] tracking-[-0.03em] text-[var(--ink)]">
+                <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl leading-[1.04] tracking-[-0.03em] font-normal text-[var(--ink)]">
                   Academic Workspaces
-                </span>
+                </h1>
                 <span className="inline-flex items-center gap-1 text-2xl sm:text-3xl select-none" aria-hidden="true">
                   <span className="text-[#F99D64] font-bold">&#10038;</span>
                   <span className="text-[#0F3D91] dark:text-[#3B82F6] font-bold">&#10038;</span>
@@ -428,6 +428,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
                 <button
                   type="button"
                   onClick={() => setCanvasActiveTool("pen")}
+                  aria-label="Draw Annotation Pen"
                   className={`p-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
                     canvasActiveTool === "pen" ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
                   }`}
@@ -440,6 +441,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
                 <button
                   type="button"
                   onClick={() => setCanvasActiveTool("highlight")}
+                  aria-label="Highlighter Tool"
                   className={`p-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
                     canvasActiveTool === "highlight" ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
                   }`}
@@ -452,6 +454,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
                 <button
                   type="button"
                   onClick={() => setCanvasActiveTool("stamp")}
+                  aria-label="Accreditation Seal Stamp"
                   className={`p-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
                     canvasActiveTool === "stamp" ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
                   }`}
@@ -464,6 +467,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
                 <button
                   type="button"
                   onClick={() => setCanvasNotes([])}
+                  aria-label="Clear all canvas annotations"
                   className="p-1.5 rounded-full text-xs text-[var(--ink-muted)] hover:text-red-500 transition-colors cursor-pointer"
                   title="Clear annotations"
                 >
@@ -485,8 +489,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
 
             {/* Interactive Canvas Area */}
             <div
+              role="region"
+              aria-label="Interactive academic review whiteboard canvas"
+              tabIndex={0}
               onClick={addCanvasNote}
-              className="relative w-full h-80 sm:h-96 rounded-2xl bg-[var(--bg)] border border-dashed border-[var(--border)] overflow-hidden cursor-crosshair select-none"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  const newNote = {
+                    id: Date.now(),
+                    text: "Verified syllabus learning objective",
+                    x: 50,
+                    y: 50,
+                    author: "You (Active Reviewer)",
+                    color: canvasActiveTool === "pen" ? "#86EFAC" : canvasActiveTool === "highlight" ? "#FDE047" : "#BAE0FD"
+                  };
+                  setCanvasNotes(prev => [...prev.slice(-3), newNote]);
+                }
+              }}
+              className="relative w-full h-80 sm:h-96 rounded-2xl bg-[var(--bg)] border border-dashed border-[var(--border)] overflow-hidden cursor-crosshair select-none focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
             >
               
               {/* Subtle Grid Pattern */}
@@ -803,7 +824,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
               <button
                 type="button"
                 onClick={() => setShowSearchModal(false)}
-                className="text-[var(--ink-muted)] hover:text-[var(--ink)] text-sm cursor-pointer"
+                aria-label="Close search dialog"
+                className="text-[var(--ink-muted)] hover:text-[var(--ink)] text-sm cursor-pointer p-1"
               >
                 &times;
               </button>
@@ -818,20 +840,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
             />
             <div className="text-xs text-[var(--ink-muted)] space-y-2 pt-2">
               <span className="font-semibold text-[var(--ink)] block">Featured Institutional Portals:</span>
-              <div
+              <button
+                type="button"
                 onClick={() => { setShowSearchModal(false); openAuth("login"); }}
-                className="p-3 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] cursor-pointer flex items-center justify-between"
+                className="w-full text-left p-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] cursor-pointer flex items-center justify-between transition-colors text-xs text-[var(--ink)]"
               >
                 <span>INES-Ruhengeri Applied Sciences (ines.ac.rw)</span>
                 <span className="text-[var(--accent)] font-semibold">Enter &rarr;</span>
-              </div>
-              <div
+              </button>
+              <button
+                type="button"
                 onClick={() => { setShowSearchModal(false); openAuth("login"); }}
-                className="p-3 rounded-xl border border-[var(--border)] hover:border-[var(--accent)] cursor-pointer flex items-center justify-between"
+                className="w-full text-left p-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] cursor-pointer flex items-center justify-between transition-colors text-xs text-[var(--ink)]"
               >
                 <span>Kigali College of Science (kcs.ac.rw)</span>
                 <span className="text-[var(--accent)] font-semibold">Enter &rarr;</span>
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -846,7 +870,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
               <button
                 type="button"
                 onClick={() => setShowWorkspaceRequestModal(false)}
-                className="text-[var(--ink-muted)] hover:text-[var(--ink)] text-sm cursor-pointer"
+                aria-label="Close workspace request dialog"
+                className="text-[var(--ink-muted)] hover:text-[var(--ink)] text-sm cursor-pointer p-1"
               >
                 &times;
               </button>
@@ -862,10 +887,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
             ) : (
               <form onSubmit={handleRequestSubmit} className="space-y-4 text-xs">
                 <div>
-                  <label className="block text-[var(--ink-muted)] font-medium mb-1">
+                  <label htmlFor="institution-name" className="block text-[var(--ink-muted)] font-medium mb-1">
                     Institution / University Name
                   </label>
                   <input
+                    id="institution-name"
                     type="text"
                     required
                     placeholder="e.g. INES-Ruhengeri Applied Sciences"
@@ -876,10 +902,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
                 </div>
 
                 <div>
-                  <label className="block text-[var(--ink-muted)] font-medium mb-1">
+                  <label htmlFor="institution-email" className="block text-[var(--ink-muted)] font-medium mb-1">
                     Official Administrative Email (.edu, .ac)
                   </label>
                   <input
+                    id="institution-email"
                     type="email"
                     required
                     placeholder="e.g. academic.registrar@ines.ac.rw"
@@ -890,10 +917,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
                 </div>
 
                 <div>
-                  <label className="block text-[var(--ink-muted)] font-medium mb-1">
+                  <label htmlFor="institution-role" className="block text-[var(--ink-muted)] font-medium mb-1">
                     Institutional Role
                   </label>
                   <select
+                    id="institution-role"
                     value={institutionRole}
                     onChange={(e) => setInstitutionRole(e.target.value)}
                     className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] px-3 py-2.5 outline-none focus:border-[var(--accent)]"
@@ -934,7 +962,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
             <button
               type="button"
               onClick={() => setShowAuthModal(false)}
-              className="absolute -top-10 right-0 text-white hover:text-gray-300 text-sm font-semibold cursor-pointer z-10"
+              aria-label="Close authentication gateway"
+              className="absolute -top-10 right-0 text-white hover:text-gray-300 text-sm font-semibold cursor-pointer z-10 p-1"
             >
               Close &times;
             </button>
