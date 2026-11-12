@@ -14,12 +14,13 @@ import { supabase } from "../supabaseClient";
 
 interface AuthPageProps {
   onAuthSuccess: (user: UserProfile) => void;
+  initialMode?: "login" | "signup";
 }
 
 const LOCAL_STORAGE_KEY_PREFIX = "sovra_";
 
-const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
-  const [isSignUp, setIsSignUp] = useState(false);
+const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, initialMode = "login" }) => {
+  const [isSignUp, setIsSignUp] = useState(initialMode === "signup");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 

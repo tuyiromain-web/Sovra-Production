@@ -32,6 +32,7 @@ import ProfileTab from "./components/ProfileTab";
 import SettingsTab from "./components/SettingsTab";
 import PharmaAI from "./components/PharmaAI";
 import AuthPage from "./components/AuthPage";
+import LandingPage from "./components/LandingPage";
 import AdminPortalTab from "./components/AdminPortalTab";
 import { RenderAvatar } from "./components/AvatarHelper";
 
@@ -669,7 +670,7 @@ export default function App() {
   }
 
   if (!isLoggedIn) {
-    return <AuthPage onAuthSuccess={handleAuthSuccess} />;
+    return <LandingPage onAuthSuccess={handleAuthSuccess} />;
   }
 
   return (
