@@ -17,22 +17,24 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
 }) => {
   const [isDark, setIsDark] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
+    const stored = localStorage.getItem("sovra-theme") || localStorage.getItem("sovra_theme");
+    if (stored === "dark") return true;
+    if (stored === "light") return false;
     return (
       document.documentElement.classList.contains("dark") ||
-      document.documentElement.getAttribute("data-theme") === "dark"
+      document.documentElement.getAttribute("data-theme") === "dark" ||
+      (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
     );
   });
 
   useEffect(() => {
-    // Synchronize initial state with DOM attribute set by anti-FOUC script
     const currentTheme = document.documentElement.getAttribute("data-theme");
     setIsDark(currentTheme === "dark" || document.documentElement.classList.contains("dark"));
 
-    // Listen to system color scheme changes if user hasn't explicitly overridden
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (e: MediaQueryListEvent) => {
       try {
-        const stored = localStorage.getItem("sovra_theme");
+        const stored = localStorage.getItem("sovra-theme") || localStorage.getItem("sovra_theme");
         if (!stored) {
           applyTheme(e.matches ? "dark" : "light");
         }
@@ -49,15 +51,12 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
     const isDarkTheme = theme === "dark";
     setIsDark(isDarkTheme);
 
-    if (isDarkTheme) {
-      document.documentElement.classList.add("dark");
-      document.documentElement.setAttribute("data-theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      document.documentElement.setAttribute("data-theme", "light");
-    }
+    // Synchronize both .classList and [data-theme] attribute immediately
+    document.documentElement.classList.toggle("dark", isDarkTheme);
+    document.documentElement.setAttribute("data-theme", theme);
 
     try {
+      localStorage.setItem("sovra-theme", theme);
       localStorage.setItem("sovra_theme", theme);
     } catch (e) {
       console.warn("Unable to save theme preference to localStorage:", e);
@@ -76,7 +75,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
       aria-checked={isDark}
       aria-label="Dark mode"
       onClick={toggleTheme}
-      className={`inline-flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-mono border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] cursor-pointer select-none ${className}`}
+      className={`inline-flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-sans font-medium border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] cursor-pointer select-none ${className}`}
     >
       <span className="relative flex items-center justify-center w-4 h-4">
         {isDark ? (
@@ -86,7 +85,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         )}
       </span>
       {showLabel && (
-        <span className="font-medium tracking-tight">
+        <span className="tracking-tight">
           {isDark ? "Dark" : "Light"}
         </span>
       )}

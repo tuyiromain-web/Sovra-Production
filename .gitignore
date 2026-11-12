@@ -9,3 +9,5 @@ coverage/
 .antigravity/
 .vscode/
 .vercel/
+.agents/skills/
+skills-lock.json

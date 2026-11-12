@@ -1,25 +1,24 @@
 # Sovra Design System Specification
 
 ## 1. Architectural Philosophy: Modern Editorial Luxury
-Sovra's design language couples the clarity and timeless elegance of high-end editorial typography with the mathematical precision of an academic instrument. The visual hierarchy enforces extreme focus, eliminating visual clutter, pastel washes, and noisy multi-color gradients.
+Sovra's design language couples the clarity and timeless elegance of high-end editorial typography with the mathematical precision of an academic instrument. The visual hierarchy enforces extreme focus, eliminating visual clutter, pill badges, pulsing dots, and decorative icons.
 
 ---
 
 ## 2. Typography Scale & Font Families
 
-The typography system uses three distinct typefaces loaded via Google Fonts, each serving a strict functional purpose:
+The typography system strictly uses two core typefaces loaded via Google Fonts:
 
 | Family | Role | CSS Variable | Tracking & Features |
 | :--- | :--- | :--- | :--- |
-| **Instrument Serif** | Display Headlines & Academic Mastheads | `--font-display` | Tight tracking (`-0.03em`), ligatures enabled (`"liga" 1, "dlig" 1`) |
-| **Plus Jakarta Sans** | UI Controls, Navigation & Body Prose | `--font-sans` | Geometric legibility, optical balance |
-| **JetBrains Mono** | Numerical metrics, timestamps, tags & badges | `--font-mono` | Tabular numbers (`font-variant-numeric: tabular-nums`, `"tnum" 1`) |
+| **Instrument Serif** | Display Headlines, Section Titles & Brand Wordmark | `--font-display` | Tight tracking (`-0.03em`), ligatures enabled (`"liga" 1, "dlig" 1`) |
+| **Plus Jakarta Sans** | UI Controls, Prose, Navigation, Metrics & Labels | `--font-sans` | Geometric clarity, optical balance; tabular numbers enabled (`.tabular-nums`) |
 
 ### Font Hierarchy
-- **Display Headlines (H1 - H2)**: `font-display tracking-[-0.03em] font-normal`
-- **Section Headers (H3 - H4)**: `font-sans font-bold tracking-tight`
-- **Body & Prose**: `font-sans text-sm md:text-base leading-relaxed`
-- **Metadata, Badges & Time**: `font-mono text-xs tracking-wider uppercase tabular-nums`
+- **Brand Wordmark & Display Headlines (H1 - H2)**: `font-display tracking-[-0.03em] font-normal`
+- **Section Headers (H3 - H4)**: `font-display tracking-tight font-normal` or `font-sans font-bold`
+- **Body & Prose**: `font-sans text-sm sm:text-base leading-relaxed`
+- **Numerical Metrics & Timestamps**: `font-sans tabular-nums font-semibold`
 
 ---
 
@@ -65,8 +64,8 @@ Sovra enforces dual pure surfaces—a zero-tint Pure White mode and an OLED Pure
   1. Primary call-to-action buttons (`.btn-accent`)
   2. Active sidebar/tab navigation indicators
   3. Keyboard focus rings (`focus-visible:ring-2 focus-visible:ring-[var(--accent)]`)
-  4. Essential status pips & telemetry data points
-- **Prohibited**: Background gradient washes, tinted cards, or rainbow status badges that compete with academic content.
+  4. Active interactive diagram elements
+- **Prohibited**: Background gradient washes, pastel badges, pulsing dots, or decorative icons that compete with academic content.
 
 ---
 
@@ -81,7 +80,7 @@ All cards, modals, sidebars, and input fields use precision 1px borders:
 ## 6. Theme Switching & Zero FOUC
 
 The application prevents Flash of Unstyled Content (FOUC) by executing a synchronous script in `<head>` of `index.html` before DOM painting:
-- Checks `localStorage.getItem('sovra_theme')`
+- Checks `localStorage.getItem('sovra-theme')`
 - Falls back to `window.matchMedia('(prefers-color-scheme: dark)')`
-- Sets `document.documentElement.classList` and `data-theme` attribute synchronously
+- Sets `document.documentElement.classList.toggle('dark', isDark)` and `data-theme` attribute synchronously
 - Interactive toggling is managed by `src/components/ui/ThemeToggle.tsx`.
