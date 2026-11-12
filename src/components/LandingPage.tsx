@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import AuthPage from "./AuthPage";
 import { UserProfile } from "../types";
+import { ThemeToggle } from "./ui/ThemeToggle";
 
 interface LandingPageProps {
   onAuthSuccess: (user: UserProfile) => void;
@@ -109,8 +110,9 @@ export default function LandingPage({ onAuthSuccess }: LandingPageProps) {
             <a href="#research" className="px-4 py-1.5 rounded-full hover:text-white transition-colors">AI Copilot</a>
           </div>
 
-          {/* Action CTAs */}
+          {/* Action CTAs & Theme Toggle */}
           <div className="flex items-center gap-2.5">
+            <ThemeToggle />
             <button
               onClick={() => openAuth("login")}
               className="px-4 py-2 rounded-full text-xs font-bold text-[#94A3B8] hover:text-white hover:bg-white/5 transition-all cursor-pointer"

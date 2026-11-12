@@ -5,10 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sovra - Academic Network & Resource Workspace</title>
     <meta name="description" content="Sovra: An automated academic documentation and resource-sharing network platform for schools, with study resources, discussion boards, check-in registries, and research copilots." />
+    <link rel="icon" type="image/svg+xml" href="/sovra-logo.svg" />
+
+    <!-- Google Fonts: Modern Editorial Luxury Typography -->
+    <!-- Instrument Serif (Display), Plus Jakarta Sans (UI/Sans), JetBrains Mono (Metrics/Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet" />
+
+    <!-- Zero-Flash-of-Unstyled-Content (FOUC) Script -->
+    <script>
+      (function() {
+        try {
+          const stored = localStorage.getItem('sovra_theme');
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = stored === 'dark' || stored === 'light' ? stored : (prefersDark ? 'dark' : 'light');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.setAttribute('data-theme', 'light');
+          }
+        } catch (e) {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
   </head>
-  <body>
+  <body class="bg-[var(--bg)] text-[var(--ink)] antialiased transition-colors duration-200">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
