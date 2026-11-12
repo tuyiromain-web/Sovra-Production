@@ -16,10 +16,8 @@ import {
   UserProfile, StudyResource, Assignment, ForumPost, 
   AttendanceSession, AppNotification, ForumReply, UserRole 
 } from "./types";
-import { 
-  INITIAL_RESOURCES, INITIAL_ASSIGNMENTS, INITIAL_FORUM_POSTS, 
-  INITIAL_ATTENDANCE_SESSIONS, INITIAL_NOTIFICATIONS, SCHEDULE_EVENTS 
-} from "./data";
+import { SCHEDULE_EVENTS } from "./data";
+import * as api from "./services/supabaseApi";
 
 // Sub-components
 import HomeDashboard from "./components/HomeDashboard";
@@ -110,32 +108,41 @@ export default function App() {
 
   const currentUser = profiles[currentRole];
 
-  const [resources, setResources] = useState<StudyResource[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY_PREFIX}resources`);
-    return saved ? JSON.parse(saved) : INITIAL_RESOURCES;
-  });
+  // Supabase Backend Data States (No Mock/Seed Data)
+  const [resources, setResources] = useState<StudyResource[]>([]);
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [forumPosts, setForumPosts] = useState<ForumPost[]>([]);
+  const [attendanceSessions, setAttendanceSessions] = useState<AttendanceSession[]>([]);
+  const [notifications, setNotifications] = useState<AppNotification[]>([]);
+  const [isDataLoading, setIsDataLoading] = useState(true);
 
-  const [assignments, setAssignments] = useState<Assignment[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY_PREFIX}assignments`);
-    return saved ? JSON.parse(saved) : INITIAL_ASSIGNMENTS;
-  });
+  // Load real data from Supabase backend on mount and auth change
+  useEffect(() => {
+    async function loadBackendData() {
+      try {
+        setIsDataLoading(true);
+        const [res, assigns, posts, att, notifs] = await Promise.all([
+          api.fetchAllResources(),
+          api.fetchAllAssignments(),
+          api.fetchAllForumPosts(),
+          api.fetchAllAttendanceSessions(),
+          api.fetchAllNotifications(),
+        ]);
+        setResources(res);
+        setAssignments(assigns);
+        setForumPosts(posts);
+        setAttendanceSessions(att);
+        setNotifications(notifs);
+      } catch (err) {
+        console.error("Failed to load initial Supabase data:", err);
+      } finally {
+        setIsDataLoading(false);
+      }
+    }
+    loadBackendData();
+  }, [isLoggedIn]);
 
-  const [forumPosts, setForumPosts] = useState<ForumPost[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY_PREFIX}forum_posts`);
-    return saved ? JSON.parse(saved) : INITIAL_FORUM_POSTS;
-  });
-
-  const [attendanceSessions, setAttendanceSessions] = useState<AttendanceSession[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY_PREFIX}attendance`);
-    return saved ? JSON.parse(saved) : INITIAL_ATTENDANCE_SESSIONS;
-  });
-
-  const [notifications, setNotifications] = useState<AppNotification[]>(() => {
-    const saved = localStorage.getItem(`${LOCAL_STORAGE_KEY_PREFIX}notifications`);
-    return saved ? JSON.parse(saved) : INITIAL_NOTIFICATIONS;
-  });
-
-  // Synchronize localStorage
+  // Synchronize user profile & role cache
   useEffect(() => {
     localStorage.setItem(`${LOCAL_STORAGE_KEY_PREFIX}profiles`, JSON.stringify(profiles));
   }, [profiles]);
@@ -143,26 +150,6 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem(`${LOCAL_STORAGE_KEY_PREFIX}current_role`, currentRole);
   }, [currentRole]);
-
-  useEffect(() => {
-    localStorage.setItem(`${LOCAL_STORAGE_KEY_PREFIX}resources`, JSON.stringify(resources));
-  }, [resources]);
-
-  useEffect(() => {
-    localStorage.setItem(`${LOCAL_STORAGE_KEY_PREFIX}assignments`, JSON.stringify(assignments));
-  }, [assignments]);
-
-  useEffect(() => {
-    localStorage.setItem(`${LOCAL_STORAGE_KEY_PREFIX}forum_posts`, JSON.stringify(forumPosts));
-  }, [forumPosts]);
-
-  useEffect(() => {
-    localStorage.setItem(`${LOCAL_STORAGE_KEY_PREFIX}attendance`, JSON.stringify(attendanceSessions));
-  }, [attendanceSessions]);
-
-  useEffect(() => {
-    localStorage.setItem(`${LOCAL_STORAGE_KEY_PREFIX}notifications`, JSON.stringify(notifications));
-  }, [notifications]);
 
   // Clock tick
   useEffect(() => {
@@ -244,43 +231,52 @@ export default function App() {
     setNotifications((prev) => [newNotif, ...prev]);
   };
 
-  // Actions: Resources
-  const handleAddResource = (newResData: Omit<StudyResource, "id" | "downloadsCount" | "uploadedBy" | "uploadedById" | "uploadedAt">) => {
-    const isLecturer = currentUser.role === "Lecturer";
-    const newRes: StudyResource = {
-      ...newResData,
-      id: `res-${Date.now()}`,
-      downloadsCount: 0,
-      uploadedBy: `${currentUser.name} (${currentUser.role})`,
-      uploadedById: currentUser.id,
-      uploadedAt: new Date().toISOString(),
-      approved: isLecturer
-    };
-    setResources((prev) => [newRes, ...prev]);
-    
-    if (isLecturer) {
-      addNotification(
-        "New Study Resource Uploaded",
-        `${currentUser.name} uploaded '${newRes.title}' in the ${newRes.courseCode} syllabus.`,
-        "announcement"
-      );
-    } else {
-      addNotification(
-        "Resource Upload Pending Approval",
-        `${currentUser.name} submitted '${newRes.title}' for lecturer approval.`,
-        "announcement"
-      );
+  // Actions: Resources (Connected to Supabase)
+  const handleAddResource = async (newResData: Omit<StudyResource, "id" | "downloadsCount" | "uploadedBy" | "uploadedById" | "uploadedAt">) => {
+    const isLecturer = currentUser.role === "Lecturer" || currentUser.role === "Admin";
+    try {
+      const created = await api.createResource({
+        ...newResData,
+        uploadedBy: `${currentUser.name} (${currentUser.role})`,
+        uploadedById: currentUser.id,
+        uploadedAt: new Date().toISOString(),
+        approved: isLecturer,
+      });
+
+      if (created) {
+        setResources((prev) => [created, ...prev]);
+        if (isLecturer) {
+          addNotification(
+            "New Study Resource Uploaded",
+            `${currentUser.name} uploaded '${created.title}' in the ${created.courseCode} syllabus.`,
+            "announcement"
+          );
+        } else {
+          addNotification(
+            "Resource Upload Pending Approval",
+            `${currentUser.name} submitted '${created.title}' for lecturer approval.`,
+            "announcement"
+          );
+        }
+      }
+    } catch (err) {
+      console.error("Error creating resource in Supabase:", err);
     }
   };
 
-  const handleIncrementDownload = (id: string) => {
+  const handleIncrementDownload = async (id: string) => {
     setResources((prev) =>
       prev.map((r) => r.id === id ? { ...r, downloadsCount: r.downloadsCount + 1 } : r)
     );
+    try {
+      await api.incrementResourceDownloadCount(id);
+    } catch (err) {
+      console.error("Failed to update download count in Supabase:", err);
+    }
   };
 
-  // Actions: Assignments
-  const handleSubmitAssignment = (assignmentId: string, submissionData: { fileName: string; fileUrl: string }) => {
+  // Actions: Assignments (Connected to Supabase)
+  const handleSubmitAssignment = async (assignmentId: string, submissionData: { fileName: string; fileUrl: string }) => {
     setAssignments((prev) =>
       prev.map((assign) => {
         if (assign.id === assignmentId) {
@@ -300,6 +296,17 @@ export default function App() {
       })
     );
 
+    try {
+      await api.submitAssignmentFile(
+        assignmentId,
+        currentUser.id,
+        currentUser.studentId,
+        submissionData
+      );
+    } catch (err) {
+      console.error("Failed to persist submission to Supabase:", err);
+    }
+
     addNotification(
       "Assignment Submission Successful",
       `You successfully submitted '${submissionData.fileName}' for evaluation.`,
@@ -307,27 +314,30 @@ export default function App() {
     );
   };
 
-  // Actions: Forum
-  const handleAddPost = (newPostData: Omit<ForumPost, "id" | "upvotes" | "replies" | "authorName" | "authorRole" | "authorId" | "createdAt">) => {
-    const newPost: ForumPost = {
-      ...newPostData,
-      id: `post-${Date.now()}`,
-      upvotes: 0,
-      replies: [],
-      authorName: currentUser.name,
-      authorRole: currentUser.role,
-      authorId: currentUser.id,
-      createdAt: new Date().toISOString()
-    };
-    setForumPosts((prev) => [newPost, ...prev]);
-    addNotification(
-      "New Forum Thread Started",
-      `${currentUser.name} started a new discussion: '${newPost.title}'`,
-      "forum"
-    );
+  // Actions: Forum (Connected to Supabase)
+  const handleAddPost = async (newPostData: Omit<ForumPost, "id" | "upvotes" | "replies" | "authorName" | "authorRole" | "authorId" | "createdAt">) => {
+    try {
+      const created = await api.createForumPost({
+        ...newPostData,
+        authorId: currentUser.id,
+        authorName: currentUser.name,
+        authorRole: currentUser.role,
+      });
+
+      if (created) {
+        setForumPosts((prev) => [created, ...prev]);
+        addNotification(
+          "New Forum Thread Started",
+          `${currentUser.name} started a new discussion: '${created.title}'`,
+          "forum"
+        );
+      }
+    } catch (err) {
+      console.error("Failed to create forum post in Supabase:", err);
+    }
   };
 
-  const handleAddReply = (postId: string, content: string) => {
+  const handleAddReply = async (postId: string, content: string) => {
     const newReply: ForumReply = {
       id: `rep-${Date.now()}`,
       content,
@@ -348,17 +358,33 @@ export default function App() {
         return post;
       })
     );
+
+    try {
+      await api.createForumReply(postId, {
+        content,
+        authorId: currentUser.id,
+        authorName: currentUser.name,
+        authorRole: currentUser.role,
+      });
+    } catch (err) {
+      console.error("Failed to create reply in Supabase:", err);
+    }
   };
 
-  const handleUpvotePost = (postId: string) => {
+  const handleUpvotePost = async (postId: string) => {
     setForumPosts((prev) =>
       prev.map((post) =>
         post.id === postId ? { ...post, upvotes: post.upvotes + 1 } : post
       )
     );
+    try {
+      await api.upvotePost(postId);
+    } catch (err) {
+      console.error("Failed to persist upvote in Supabase:", err);
+    }
   };
 
-  // Actions: Attendance
+  // Actions: Attendance (Connected to Supabase)
   const handleCheckIn = (sessionId: string, passcode: string, studentName: string): boolean => {
     const session = attendanceSessions.find((s) => s.id === sessionId);
     if (!session || session.passcode.toUpperCase() !== passcode.toUpperCase()) {
@@ -384,6 +410,15 @@ export default function App() {
       })
     );
 
+    api.checkInStudentAttendance(
+      sessionId,
+      currentUser.id,
+      studentName,
+      currentUser.studentId
+    ).catch((err) => {
+      console.error("Failed to persist attendance check-in to Supabase:", err);
+    });
+
     addNotification(
       "Automated Check-In Verified",
       `Lecture registration completed for ${session.courseCode}. Checked in successfully.`,
@@ -393,38 +428,42 @@ export default function App() {
     return true;
   };
 
-  const handleCreateSession = (sessionData: {
+  const handleCreateSession = async (sessionData: {
     courseCode: string;
     courseName: string;
     timeSlot: string;
     passcode: string;
     academicYear: string;
   }) => {
-    const isLecturer = currentUser.role === "Lecturer";
-    const newSession: AttendanceSession = {
-      ...sessionData,
-      id: `att-${Date.now()}`,
-      date: new Date().toISOString().split("T")[0],
-      isActive: isLecturer,
-      approved: isLecturer,
-      requestedBy: currentUser.name,
-      checkedInStudents: {}
-    };
+    const isLecturer = currentUser.role === "Lecturer" || currentUser.role === "Admin";
+    try {
+      const created = await api.createAttendanceSessionRecord({
+        ...sessionData,
+        createdBy: currentUser.id,
+        createdByName: currentUser.name,
+        isActive: isLecturer,
+        verifiedByLecturer: isLecturer,
+      });
 
-    setAttendanceSessions((prev) => [newSession, ...prev]);
+      if (created) {
+        setAttendanceSessions((prev) => [created, ...prev]);
 
-    if (isLecturer) {
-      addNotification(
-        `Attendance Check-In Open: ${newSession.courseCode}`,
-        `Class check-in is now open for ${newSession.courseName}. Passcode: ${newSession.passcode}`,
-        "attendance"
-      );
-    } else {
-      addNotification(
-        "Attendance Session Requested",
-        `Class representative ${currentUser.name} has requested an attendance check-in session for ${newSession.courseName} (${newSession.courseCode}). Pending lecturer approval.`,
-        "attendance"
-      );
+        if (isLecturer) {
+          addNotification(
+            `Attendance Check-In Open: ${created.courseCode}`,
+            `Class check-in is now open for ${created.courseName}. Passcode: ${created.passcode}`,
+            "attendance"
+          );
+        } else {
+          addNotification(
+            "Attendance Session Requested",
+            `Class representative ${currentUser.name} has requested an attendance check-in session for ${created.courseName} (${created.courseCode}). Pending lecturer approval.`,
+            "attendance"
+          );
+        }
+      }
+    } catch (err) {
+      console.error("Failed to create attendance session in Supabase:", err);
     }
   };
 
@@ -439,7 +478,7 @@ export default function App() {
     addNotification(ann.title, ann.message, ann.type, ann.targetLecturer, ann.targetModule);
   };
 
-  const handleGradeAssignment = (assignmentId: string, studentId: string, grade: string, feedback: string) => {
+  const handleGradeAssignment = async (assignmentId: string, studentId: string, grade: string, feedback: string) => {
     setAssignments((prev) =>
       prev.map((assign) => {
         if (assign.id === assignmentId) {
@@ -462,17 +501,28 @@ export default function App() {
       })
     );
 
+    try {
+      await api.gradeStudentSubmission(assignmentId, studentId, grade, feedback);
+    } catch (err) {
+      console.error("Failed to grade assignment in Supabase:", err);
+    }
+
     addNotification(
       "Module Assignment Graded",
-      `New grade reported for ${currentUser.name === "Jean de Dieu" ? "Pascal Gasana" : "your submissions"}: ${grade}`,
+      `New grade reported for ${studentId}: ${grade}`,
       "grade"
     );
   };
 
-  const handleApproveResource = (resourceId: string) => {
+  const handleApproveResource = async (resourceId: string) => {
     setResources((prev) =>
       prev.map((res) => res.id === resourceId ? { ...res, approved: true } : res)
     );
+    try {
+      await api.approveResource(resourceId);
+    } catch (err) {
+      console.error("Failed to approve resource in Supabase:", err);
+    }
     const approvedRes = resources.find((res) => res.id === resourceId);
     if (approvedRes) {
       addNotification(
@@ -483,12 +533,17 @@ export default function App() {
     }
   };
 
-  const handleApproveAttendanceSession = (sessionId: string) => {
+  const handleApproveAttendanceSession = async (sessionId: string) => {
     setAttendanceSessions((prev) =>
       prev.map((sess) =>
         sess.id === sessionId ? { ...sess, approved: true, isActive: true } : sess
       )
     );
+    try {
+      await api.approveAttendanceSession(sessionId);
+    } catch (err) {
+      console.error("Failed to approve attendance session in Supabase:", err);
+    }
     const approvedSess = attendanceSessions.find((s) => s.id === sessionId);
     if (approvedSess) {
       addNotification(
@@ -500,14 +555,24 @@ export default function App() {
   };
 
   // Action: Notifications marking
-  const handleMarkNotificationAsRead = (id: string) => {
+  const handleMarkNotificationAsRead = async (id: string) => {
     setNotifications((prev) =>
       prev.map((n) => n.id === id ? { ...n, isRead: true } : n)
     );
+    try {
+      await api.markNotificationAsReadInDb(id);
+    } catch (err) {
+      console.error("Failed to update notification in Supabase:", err);
+    }
   };
 
-  const handleMarkAllNotificationsAsRead = () => {
+  const handleMarkAllNotificationsAsRead = async () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    try {
+      await api.markAllNotificationsAsReadInDb();
+    } catch (err) {
+      console.error("Failed to mark all notifications as read in Supabase:", err);
+    }
   };
 
   const [settingsSubTab, setSettingsSubTab] = useState<"profile" | "preferences">("profile");

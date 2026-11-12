@@ -12,6 +12,7 @@ import {
   Pin, Sparkles, Send, FileText, CheckCircle2, UserPlus, ShieldAlert, RotateCcw
 } from "lucide-react";
 import { UserProfile, UserRole, StudyResource, Assignment, ForumPost, AttendanceSession } from "../types";
+import { fetchAllProfiles } from "../services/supabaseApi";
 
 interface AdminPortalTabProps {
   currentUser: UserProfile;
@@ -81,70 +82,31 @@ export default function AdminPortalTab({
   // Forums oversight search
   const [forumSearch, setForumSearch] = useState("");
 
-  // Load registered users from LocalStorage
+  // Load registered users from Supabase Profiles
   useEffect(() => {
-    const saved = localStorage.getItem("sovra_local_users") || localStorage.getItem("pharmalink_local_users");
-    let users: LocalUserObj[] = [];
-    
-    // Seed initial users list if empty to show a highly populated interface
-    if (!saved || JSON.parse(saved).length === 0) {
-      users = [
-        {
-          id: "student-user",
-          name: "Pascal Gasana",
-          email: "pascal@ines.ac.rw",
-          studentId: "std-1102",
-          role: "Student",
-          academicYear: "Year 2",
-          joinedAt: new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString()
-        },
-        {
-          id: "student-rep",
-          name: "Jean de Dieu",
-          email: "jeandedieu@ines.ac.rw",
-          studentId: "student-rep",
-          role: "Class Representative",
-          academicYear: "Year 3",
-          joinedAt: new Date(Date.now() - 45 * 24 * 3600 * 1000).toISOString()
-        },
-        {
-          id: "lecturer-user",
-          name: "Dr. Emmanuel Mutangana",
-          email: "emutangana@ines.ac.rw",
-          studentId: "LEC-405",
-          role: "Lecturer",
-          academicYear: "Year 4",
-          joinedAt: new Date(Date.now() - 60 * 24 * 3600 * 1000).toISOString()
-        },
-        {
-          id: "usr-seed-1",
-          name: "Marie-Claire Uwumukiza",
-          email: "m.uwumukiza@ines.ac.rw",
-          studentId: "LEC-881",
-          role: "Lecturer",
-          academicYear: "Year 4",
-          joinedAt: new Date(Date.now() - 15 * 24 * 3600 * 1000).toISOString()
-        },
-        {
-          id: "usr-seed-2",
-          name: "Olivier Nsengiyumva",
-          email: "olivier.n@ines.ac.rw",
-          studentId: "STD-9043",
-          role: "Student",
-          academicYear: "Year 1",
-          joinedAt: new Date(Date.now() - 5 * 24 * 3600 * 1000).toISOString()
-        }
-      ];
-      localStorage.setItem("sovra_local_users", JSON.stringify(users));
-    } else {
+    async function loadProfiles() {
       try {
-        const decoded = JSON.parse(saved);
-        users = decoded.map(({ password, ...u }: any) => u);
-      } catch (e) {
-        // ignore
+        const profiles = await fetchAllProfiles();
+        if (profiles && profiles.length > 0) {
+          const mapped: LocalUserObj[] = profiles.map((p) => ({
+            id: p.id,
+            name: p.name,
+            email: p.email,
+            studentId: p.student_id,
+            role: p.role,
+            academicYear: p.academic_year || "Year 1",
+            joinedAt: p.created_at,
+          }));
+          setUsersList(mapped);
+        } else {
+          setUsersList([]);
+        }
+      } catch (err) {
+        console.error("Error loading profiles in Admin Portal:", err);
+        setUsersList([]);
       }
     }
-    setUsersList(users);
+    loadProfiles();
   }, []);
 
   const triggerAlert = (success: string, error = "") => {

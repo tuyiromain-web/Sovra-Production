@@ -39,6 +39,11 @@ CREATE TRIGGER set_schools_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_updated_at();
 
+-- Default institutional workspace for Sovra
+INSERT INTO public.schools (id, name, slug, code, domain, country)
+VALUES ('00000000-0000-0000-0000-000000000001', 'INES-Ruhengeri', 'ines-ruhengeri', 'INES', 'ines.ac.rw', 'Rwanda')
+ON CONFLICT (slug) DO NOTHING;
+
 -- 3. PROFILES (Extends auth.users with RBAC and Institutional Workspace linkage)
 CREATE TYPE public.user_role AS ENUM ('Student', 'Class Representative', 'Lecturer', 'Admin');
 
