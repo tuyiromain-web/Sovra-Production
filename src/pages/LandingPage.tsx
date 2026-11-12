@@ -12,9 +12,10 @@ import { UserProfile } from "../types";
 
 export interface LandingPageProps {
   onAuthSuccess: (user: UserProfile) => void;
+  onEnterWorkspace?: (tenantId?: string) => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnterWorkspace }) => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<"login" | "signup">("login");
   const [showWorkspaceRequestModal, setShowWorkspaceRequestModal] = useState(false);
@@ -215,7 +216,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => openAuth("login")}
+                  onClick={() => { if (onEnterWorkspace) onEnterWorkspace(); else openAuth("login"); }}
                   className="rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] hover:border-[var(--ink)] px-6 py-3.5 text-sm font-semibold transition-colors cursor-pointer"
                 >
                   Enter Existing School Portal
@@ -781,7 +782,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
               </button>
               <button
                 type="button"
-                onClick={() => openAuth("login")}
+                onClick={() => { if (onEnterWorkspace) onEnterWorkspace(); else openAuth("login"); }}
                 className="rounded-full border border-[var(--border)] bg-[var(--bg)] text-[var(--ink)] hover:border-[var(--ink)] px-7 py-3.5 text-sm font-semibold transition-colors cursor-pointer"
               >
                 Sign In to Existing School Portal
@@ -842,7 +843,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
               <span className="font-semibold text-[var(--ink)] block">Featured Institutional Portals:</span>
               <button
                 type="button"
-                onClick={() => { setShowSearchModal(false); openAuth("login"); }}
+                onClick={() => { setShowSearchModal(false); if (onEnterWorkspace) onEnterWorkspace("tenant-ines"); else openAuth("login"); }}
                 className="w-full text-left p-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] cursor-pointer flex items-center justify-between transition-colors text-xs text-[var(--ink)]"
               >
                 <span>INES-Ruhengeri Applied Sciences (ines.ac.rw)</span>
@@ -850,7 +851,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess }) => {
               </button>
               <button
                 type="button"
-                onClick={() => { setShowSearchModal(false); openAuth("login"); }}
+                onClick={() => { setShowSearchModal(false); if (onEnterWorkspace) onEnterWorkspace("tenant-kcs"); else openAuth("login"); }}
                 className="w-full text-left p-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] cursor-pointer flex items-center justify-between transition-colors text-xs text-[var(--ink)]"
               >
                 <span>Kigali College of Science (kcs.ac.rw)</span>

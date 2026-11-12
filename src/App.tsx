@@ -31,6 +31,7 @@ import SettingsTab from "./components/SettingsTab";
 import PharmaAI from "./components/PharmaAI";
 import AuthPage from "./components/AuthPage";
 import LandingPage from "./components/LandingPage";
+import AppWorkspace from "./pages/AppWorkspace";
 import AdminPortalTab from "./components/AdminPortalTab";
 import { RenderAvatar } from "./components/AvatarHelper";
 import { ThemeToggle } from "./components/ui/ThemeToggle";
@@ -44,6 +45,10 @@ export default function App() {
 
   // Real-time clock state
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Institutional Workspace View State
+  const [viewMode, setViewMode] = useState<"landing" | "workspace">("landing");
+  const [currentTenantId, setCurrentTenantId] = useState<string>("tenant-stjude");
 
   // Auth State
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -735,9 +740,36 @@ export default function App() {
     );
   }
 
-  if (!isLoggedIn) {
-    return <LandingPage onAuthSuccess={handleAuthSuccess} />;
+  if (viewMode === "workspace") {
+    return (
+      <AppWorkspace
+        initialTenantId={currentTenantId}
+        onNavigateToLanding={() => setViewMode("landing")}
+      />
+    );
   }
+
+  if (!isLoggedIn) {
+    return (
+      <LandingPage
+        onAuthSuccess={(user) => {
+          handleAuthSuccess(user);
+          setViewMode("workspace");
+        }}
+        onEnterWorkspace={(tenantId) => {
+          if (tenantId) setCurrentTenantId(tenantId);
+          setViewMode("workspace");
+        }}
+      />
+    );
+  }
+
+  return (
+    <AppWorkspace
+      initialTenantId={currentTenantId}
+      onNavigateToLanding={() => setViewMode("landing")}
+    />
+  );
 
   return (
     <div className="flex h-screen bg-[#070B14] text-[#F8FAFC] font-sans overflow-hidden">

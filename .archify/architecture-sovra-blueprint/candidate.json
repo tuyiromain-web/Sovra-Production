@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Sovra Multi-Tenant Architecture & Workspace Isolation",
+    "output": "docs/architecture.html",
+    "quality_profile": "standard"
+  },
+  "components": [
+    { "id": "users", "type": "external", "label": "Academic Users", "sublabel": "Faculty, Students & Deans", "pos": [40, 270], "size": [140, 64] },
+    { "id": "auth_service", "type": "security", "label": "Institutional Auth", "sublabel": "OAuth + tenant_id JWT", "pos": [230, 110], "size": [160, 64], "tag": "Scope Gated" },
+    { "id": "edge_gateway", "type": "cloud", "label": "Sovra Edge Gateway", "sublabel": "Tenant Resolution & CDN", "pos": [230, 270], "size": [160, 64], "tag": "Subdomain Scope" },
+    { "id": "tenant_stjude", "type": "backend", "label": "St. Jude Workspace", "sublabel": "Isolated Tenant (SJTU)", "pos": [470, 180], "size": [160, 64], "tag": "sec_prt_sjtu" },
+    { "id": "tenant_ines", "type": "backend", "label": "INES Workspace", "sublabel": "Isolated Tenant (INES)", "pos": [470, 360], "size": [160, 64], "tag": "sec_prt_ines" },
+    { "id": "programs_engine", "type": "backend", "label": "Academic Programs", "sublabel": "Degree Tracks & Modules", "pos": [740, 180], "size": [160, 64], "tag": "Curricula Matrix" },
+    { "id": "doc_ledger", "type": "backend", "label": "Faculty Doc Ledger", "sublabel": "Syllabi & Version Vault", "pos": [740, 360], "size": [160, 64], "tag": "SHA-256 Indexed" },
+    { "id": "postgres_rls", "type": "database", "label": "PostgreSQL Engine", "sublabel": "Row-Level Security Policies", "pos": [1000, 180], "size": [160, 64], "tag": "RLS Partition" },
+    { "id": "storage_vault", "type": "cloud", "label": "Encrypted File Vault", "sublabel": "AES-256 Object Storage", "pos": [1000, 360], "size": [160, 64], "tag": "Signed URLs" },
+    { "id": "cohort_registry", "type": "backend", "label": "Student & Cohort Portals", "sublabel": "Passcode Attendance Sync", "pos": [740, 500], "size": [160, 64], "tag": "Dynamic Passcode" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Sovra Multi-Tenant Institutional Boundary", "wraps": ["tenant_stjude", "tenant_ines", "programs_engine", "doc_ledger", "postgres_rls", "storage_vault", "cohort_registry"] },
+    { "kind": "security-group", "label": "Cryptographic Data & Storage Perimeter", "wraps": ["postgres_rls", "storage_vault"] }
+  ],
+  "connections": [
+    { "id": "users-to-edge", "from": "users", "to": "edge_gateway", "label": "HTTPS / TLS 1.3", "variant": "emphasis" },
+    { "id": "auth-verify", "from": "auth_service", "to": "edge_gateway", "label": "Verify JWT Claim", "variant": "security", "labelDy": 24 },
+    { "id": "edge-to-stjude", "from": "edge_gateway", "to": "tenant_stjude", "label": "Route sjtu.edu" },
+    { "id": "edge-to-ines", "from": "edge_gateway", "to": "tenant_ines", "label": "Route ines.ac.rw" },
+    { "id": "stjude-to-programs", "from": "tenant_stjude", "to": "programs_engine", "label": "Curricular Scope" },
+    { "id": "ines-to-docs", "from": "tenant_ines", "to": "doc_ledger", "label": "Syllabus Vault" },
+    { "id": "programs-to-db", "from": "programs_engine", "to": "postgres_rls", "label": "Query Programs" },
+    { "id": "docs-to-db", "from": "doc_ledger", "to": "postgres_rls", "label": "Audit Logs" },
+    { "id": "docs-to-storage", "from": "doc_ledger", "to": "storage_vault", "label": "Payload Store", "labelDy": 18 },
+    { "id": "ines-to-cohorts", "from": "tenant_ines", "to": "cohort_registry", "label": "Roster Access" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Isolated School Workspaces", "items": ["Hardware and database-enforced multi-tenant partitions", "Dedicated institution domain routing with isolated keys"] },
+    { "dot": "violet", "title": "Academic Programs & Faculty Docs", "items": ["Continuous syllabus versioning and ABET/HEC accreditation audits", "Immutable documentation ledgers and multi-format lecture packs"] },
+    { "dot": "slate", "title": "Zero-Leakage Security Perimeter", "items": ["PostgreSQL Row-Level Security targeting tenant_id in JWT claims", "Client-side envelope AES-256 encryption for all documents"] }
+  ]
+}
