@@ -17,7 +17,7 @@ export const StudentsRolesView: React.FC = () => {
         <span className="text-[10px] font-semibold tracking-wider uppercase text-[var(--accent)] block mb-1">
           Identity & Cohort Perimeters &bull; {activeTenant.code}
         </span>
-        <h1 className="font-display text-3xl sm:text-4xl font-semibold text-[var(--ink)] tracking-tight">
+        <h1 className="font-sans text-3xl sm:text-4xl font-semibold text-[var(--ink)] tracking-tight">
           Student Cohorts & Verified Roles
         </h1>
         <p className="text-xs text-[var(--ink-muted)] mt-1 max-w-2xl">
@@ -40,7 +40,7 @@ export const StudentsRolesView: React.FC = () => {
                 </span>
               </div>
 
-              <div className="font-display text-xl font-semibold text-[var(--ink)]">
+              <div className="font-sans text-xl font-semibold text-[var(--ink)]">
                 {cohort.program}
               </div>
 

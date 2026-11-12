@@ -33,7 +33,7 @@ export const ResourceVaultView: React.FC = () => {
           <span className="text-[10px] font-semibold tracking-wider uppercase text-[var(--accent)] block mb-1">
             Curated Academic Storage &bull; {activeTenant.code}
           </span>
-          <h1 className="font-display text-3xl sm:text-4xl font-semibold text-[var(--ink)] tracking-tight">
+          <h1 className="font-sans text-3xl sm:text-4xl font-semibold text-[var(--ink)] tracking-tight">
             Curated Resource Vault & Compendiums
           </h1>
           <p className="text-xs text-[var(--ink-muted)] mt-1 max-w-2xl">

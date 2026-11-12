@@ -33,21 +33,21 @@ export const TenantSwitcher: React.FC = () => {
       >
         <div className="flex items-center justify-between gap-2 mb-1">
           <span className="text-[11px] font-medium tracking-wider uppercase text-[var(--ink-muted)]">
-            Active Tenant
+            Active Campus
           </span>
           <span className="text-[11px] font-semibold text-[var(--ink)] tabular-nums">
             {activeTenant.code}
           </span>
         </div>
 
-        <div className="font-display text-base font-semibold text-[var(--ink)] tracking-tight truncate">
+        <div className="font-sans text-base font-semibold text-[var(--ink)] tracking-tight truncate">
           {activeTenant.name}
         </div>
 
         <div className="flex items-center justify-between text-[11px] text-[var(--ink-muted)] mt-1.5 pt-1.5 border-t border-[var(--border)]">
           <span className="truncate">{activeTenant.domain}</span>
           <span className="text-[10px] tabular-nums font-sans opacity-80 shrink-0">
-            {activeTenant.isolatedPartitionKey.slice(0, 11)}...
+            {activeTenant.term}
           </span>
         </div>
       </button>
@@ -55,11 +55,11 @@ export const TenantSwitcher: React.FC = () => {
       {isOpen && (
         <div
           role="listbox"
-          aria-label="Available institutional tenants"
+          aria-label="Available institutional campuses"
           className="absolute left-0 right-0 top-full mt-1.5 z-50 border border-[var(--border)] bg-[var(--bg)] shadow-xl max-h-72 overflow-y-auto"
         >
           <div className="p-2 border-b border-[var(--border)] text-[11px] font-semibold text-[var(--ink-muted)] uppercase tracking-wider">
-            Cryptographically Isolated Workspaces
+            Dedicated University Workspaces
           </div>
           {availableTenants.map((tenant) => {
             const isSelected = tenant.id === activeTenant.id;
@@ -78,7 +78,7 @@ export const TenantSwitcher: React.FC = () => {
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-display text-sm text-[var(--ink)]">
+                  <span className="font-sans text-sm text-[var(--ink)]">
                     {tenant.name}
                   </span>
                   {isSelected && (

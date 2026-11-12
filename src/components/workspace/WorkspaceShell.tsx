@@ -45,7 +45,7 @@ export const WorkspaceShell: React.FC = () => {
       {/* Mobile Header Bar */}
       <div className="lg:hidden flex items-center justify-between p-4 border-b border-[var(--border)] bg-[var(--surface)]">
         <div>
-          <span className="font-display text-xl font-semibold text-[var(--ink)]">
+          <span className="font-sans text-xl font-semibold text-[var(--ink)]">
             SOVRA
           </span>
           <span className="block text-[10px] text-[var(--ink-muted)]">
@@ -83,7 +83,7 @@ export const WorkspaceShell: React.FC = () => {
           {/* Breadcrumb Header Bar */}
           <div className="flex items-center justify-between text-xs text-[var(--ink-muted)] border-b border-[var(--border)] pb-3">
             <div className="flex items-center gap-2">
-              <span className="font-display text-sm font-semibold text-[var(--ink)]">
+              <span className="font-sans text-sm font-semibold text-[var(--ink)]">
                 {activeTenant.name}
               </span>
               <span>/</span>
@@ -94,10 +94,10 @@ export const WorkspaceShell: React.FC = () => {
 
             <div className="flex items-center gap-3">
               <span className="hidden sm:inline-block font-sans tabular-nums text-[10px] text-[var(--ink-muted)]">
-                Hardware Partition: {activeTenant.isolatedPartitionKey.slice(0, 15)}...
+                Campus Domain: {activeTenant.domain}
               </span>
               <span className="border border-[var(--border)] bg-[var(--surface)] px-2 py-0.5 text-[10px] font-semibold text-[var(--ink)]">
-                RLS Active
+                Private Campus Network
               </span>
             </div>
           </div>

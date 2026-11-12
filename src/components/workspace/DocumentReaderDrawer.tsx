@@ -55,7 +55,7 @@ export const DocumentReaderDrawer: React.FC = () => {
                 <span>&bull;</span>
                 <span className="tabular-nums">{selectedDoc.version}</span>
               </div>
-              <h2 className="font-display text-2xl sm:text-3xl font-semibold text-[var(--ink)] tracking-tight">
+              <h2 className="font-sans text-2xl sm:text-3xl font-semibold text-[var(--ink)] tracking-tight">
                 {selectedDoc.title}
               </h2>
             </div>
@@ -101,7 +101,7 @@ export const DocumentReaderDrawer: React.FC = () => {
 
           {/* Executive Summary */}
           <div className="space-y-2">
-            <h3 className="font-display text-lg text-[var(--ink)] tracking-tight">
+            <h3 className="font-sans text-lg text-[var(--ink)] tracking-tight">
               Curricular Scope & Abstract
             </h3>
             <p className="text-xs sm:text-sm text-[var(--ink-muted)] leading-relaxed">
@@ -111,7 +111,7 @@ export const DocumentReaderDrawer: React.FC = () => {
 
           {/* Learning Objectives */}
           <div className="space-y-3">
-            <h3 className="font-display text-lg text-[var(--ink)] tracking-tight">
+            <h3 className="font-sans text-lg text-[var(--ink)] tracking-tight">
               Verified Learning Milestones
             </h3>
             <ul className="space-y-2 text-xs text-[var(--ink)]">
@@ -129,7 +129,7 @@ export const DocumentReaderDrawer: React.FC = () => {
           {/* Prerequisites & Accreditation Alignment */}
           <div className="space-y-4">
             <div className="space-y-2">
-              <h3 className="font-display text-lg text-[var(--ink)] tracking-tight">
+              <h3 className="font-sans text-lg text-[var(--ink)] tracking-tight">
                 Academic Prerequisites
               </h3>
               <div className="flex flex-wrap gap-2 text-xs">
@@ -142,7 +142,7 @@ export const DocumentReaderDrawer: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <h3 className="font-display text-lg text-[var(--ink)] tracking-tight">
+              <h3 className="font-sans text-lg text-[var(--ink)] tracking-tight">
                 Accreditation Alignment
               </h3>
               <div className="p-3 border border-[var(--border)] bg-[var(--surface)] text-xs text-[var(--ink)] font-medium">

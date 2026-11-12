@@ -21,13 +21,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
   const [showWorkspaceRequestModal, setShowWorkspaceRequestModal] = useState(false);
   const [institutionName, setInstitutionName] = useState("");
   const [institutionEmail, setInstitutionEmail] = useState("");
-  const [institutionRole, setInstitutionRole] = useState("Dean of Academic Affairs");
+  const [institutionRole, setInstitutionRole] = useState("Faculty Lecturer");
   const [requestSubmitted, setRequestSubmitted] = useState(false);
   const [selectedDirectionTab, setSelectedDirectionTab] = useState<number>(0);
   const [canvasActiveTool, setCanvasActiveTool] = useState<"pen" | "highlight" | "stamp" | "eraser">("pen");
   const [canvasNotes, setCanvasNotes] = useState<Array<{ id: number; text: string; x: number; y: number; author: string; color: string }>>([
-    { id: 1, text: "Curriculum matches 2026 ABET Standards ✓", x: 28, y: 35, author: "Dr. Jane Cooper", color: "#D8B4F8" },
-    { id: 2, text: "Clinical hours verified by Dean Board", x: 62, y: 55, author: "Prof. Wade Warren", color: "#FBA774" }
+    { id: 1, text: "Curriculum matches 2026 academic standards ✓", x: 28, y: 35, author: "Dr. Jane Cooper", color: "#D8B4F8" },
+    { id: 2, text: "Clinical hours verified by department board", x: 62, y: 55, author: "Prof. Wade Warren", color: "#FBA774" }
   ]);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,40 +58,40 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
       text: "Verified syllabus learning objective",
       x: Math.max(10, Math.min(85, x)),
       y: Math.max(15, Math.min(80, y)),
-      author: "You (Active Reviewer)",
+      author: "You (Reviewer)",
       color: canvasActiveTool === "pen" ? "#86EFAC" : canvasActiveTool === "highlight" ? "#FDE047" : "#BAE0FD"
     };
     setCanvasNotes(prev => [...prev.slice(-3), newNote]);
   };
 
-  // 3 Directions of Education (Programs)
+  // Academic Directions (Curated Degree Programs)
   const directions = [
     {
-      badge: "Accredited Track",
+      badge: "Degree Program",
       title: "Applied Pharmacology",
-      duration: "4 years of dedicated clinical study",
+      duration: "4 years of clinical study",
       studentsCount: "420 Students",
       bgClass: "bg-[#D4F49C] text-[#0F2916] dark:bg-[#152B1C] dark:text-[#D4F49C]",
       borderClass: "border-[#B5E86E]/40 dark:border-[#23452E]",
       tagColor: "bg-[#0F2916] text-[#D4F49C] dark:bg-[#D4F49C] dark:text-[#0F2916]",
       arrowBg: "bg-white/90 text-[#0F2916] dark:bg-[#0F2916] dark:text-white",
       image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=700&q=80",
-      description: "Pharmaceutical chemistry, clinical dosage modeling, pharmacokinetics, and healthcare regulatory compliance."
+      description: "Pharmaceutical chemistry, clinical dosage modeling, laboratory pharmacokinetics, and healthcare regulatory compliance."
     },
     {
-      badge: "STEM Honors",
+      badge: "Degree Program",
       title: "Distributed Systems & AI",
-      duration: "3 years of advanced engineering",
+      duration: "3 years of software engineering",
       studentsCount: "680 Students",
       bgClass: "bg-[#FBA774] text-[#3D1407] dark:bg-[#381B10] dark:text-[#FFCEBC]",
       borderClass: "border-[#F99252]/40 dark:border-[#522818]",
       tagColor: "bg-[#3D1407] text-[#FBA774] dark:bg-[#FFCEBC] dark:text-[#3D1407]",
       arrowBg: "bg-white/90 text-[#3D1407] dark:bg-[#3D1407] dark:text-white",
       image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=700&q=80",
-      description: "Fault-tolerant architectures, consensus protocols, large-scale machine learning pipelines, and network cryptography."
+      description: "Modern network architectures, database design, machine learning pipelines, and verified algorithmic computation."
     },
     {
-      badge: "Clinical Residency",
+      badge: "Clinical Track",
       title: "Clinical Medicine & Surgery",
       duration: "5 years of hospital rotation",
       studentsCount: "310 Students",
@@ -100,51 +100,48 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
       tagColor: "bg-[#0A1E35] text-[#B6D6F8] dark:bg-[#CEE6FF] dark:text-[#0A1E35]",
       arrowBg: "bg-white/90 text-[#0A1E35] dark:bg-[#0A1E35] dark:text-white",
       image: "https://images.unsplash.com/photo-1581056771107-24ca5f033842?auto=format&fit=crop&w=700&q=80",
-      description: "Internal medicine, pathology, surgical rotations, triage diagnostics, and clinical ethics in university hospital centers."
+      description: "Internal medicine, pathology, surgical rounds, diagnostics, and patient care ethics in university teaching hospitals."
     }
   ];
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--ink)] font-sans antialiased transition-colors duration-150 selection:bg-[var(--accent)] selection:text-white">
       
-      {/* 1. Header: Modern Minimalist Navigation with Segmented Pill Menu */}
+      {/* 1. Header: Approachable Academic Navigation (Product, Features, Future Products, About) */}
       <header className="sticky top-0 z-40 w-full border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
           
-          {/* Brand Wordmark (Instrument Serif + Soft Brand Geometry) */}
+          {/* Brand Wordmark (Plus Jakarta Sans Sole Typeface Rule) */}
           <div className="flex items-center gap-3">
             <a href="#" className="flex items-center gap-2 group">
-              <span className="font-display text-2xl sm:text-3xl font-semibold tracking-tight text-[var(--ink)] group-hover:text-[var(--accent)] transition-colors">
+              <span className="font-sans font-bold text-2xl sm:text-3xl tracking-[-0.03em] text-[var(--ink)] group-hover:text-[var(--accent)] transition-colors">
                 SOVRA
               </span>
             </a>
           </div>
 
-          {/* Floating Segmented Pill Menu (Reference Design Pattern) */}
-          <nav className="hidden lg:flex items-center bg-[var(--surface)] border border-[var(--border)] rounded-full px-2 py-1 shadow-sm text-xs font-medium text-[var(--ink-muted)]">
-            <a href="#workspaces" className="px-4 py-1.5 rounded-full hover:text-[var(--ink)] hover:bg-[var(--bg)] transition-colors">
-              Workspaces
+          {/* Central Academic Navigation Links */}
+          <nav className="hidden lg:flex items-center bg-[var(--surface)] border border-[var(--border)] rounded-full px-3 py-1 shadow-xs text-xs font-medium text-[var(--ink-muted)]">
+            <a href="#product" className="px-4 py-1.5 rounded-full hover:text-[var(--ink)] hover:bg-[var(--bg)] transition-colors">
+              Product
             </a>
-            <a href="#directions" className="px-4 py-1.5 rounded-full hover:text-[var(--ink)] hover:bg-[var(--bg)] transition-colors">
-              Directions
+            <a href="#features" className="px-4 py-1.5 rounded-full hover:text-[var(--ink)] hover:bg-[var(--bg)] transition-colors">
+              Features
             </a>
-            <a href="#collaboration" className="px-4 py-1.5 rounded-full hover:text-[var(--ink)] hover:bg-[var(--bg)] transition-colors">
-              Collaboration
+            <a href="#future" className="px-4 py-1.5 rounded-full hover:text-[var(--ink)] hover:bg-[var(--bg)] transition-colors">
+              Future Products
             </a>
-            <a href="#pipeline" className="px-4 py-1.5 rounded-full hover:text-[var(--ink)] hover:bg-[var(--bg)] transition-colors">
-              Pipeline
-            </a>
-            <a href="#architecture" className="px-4 py-1.5 rounded-full hover:text-[var(--ink)] hover:bg-[var(--bg)] transition-colors">
-              Isolation
+            <a href="#about" className="px-4 py-1.5 rounded-full hover:text-[var(--ink)] hover:bg-[var(--bg)] transition-colors">
+              About
             </a>
           </nav>
 
-          {/* Right Action Controls: Search, Theme Toggle, Auth & CTA */}
+          {/* Right Action Controls: Search, Theme Toggle, Sign In & Primary Academic CTA */}
           <div className="flex items-center gap-2.5 sm:gap-3">
             <button
               type="button"
               onClick={() => setShowSearchModal(true)}
-              aria-label="Search academic portals"
+              aria-label="Search campus directory"
               className="w-9 h-9 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors cursor-pointer"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -165,19 +162,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
             <button
               type="button"
               onClick={() => setShowWorkspaceRequestModal(true)}
-              className="rounded-full bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] px-5 py-2.5 text-xs font-semibold tracking-tight transition-all shadow-sm cursor-pointer whitespace-nowrap"
+              className="rounded-full bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] px-5 py-2.5 text-xs font-semibold tracking-tight transition-all shadow-xs cursor-pointer whitespace-nowrap"
             >
-              Request Workspace
+              Join Your University
             </button>
           </div>
 
         </div>
       </header>
 
-      {/* 2. Hero Section: Asymmetric Composition with Squircle Hero Frame & Playful Badges */}
+      {/* 2. Hero Section: Human Academic Language */}
       <section className="relative overflow-hidden pt-10 sm:pt-16 pb-16 sm:pb-24 border-b border-[var(--border)]">
         
-        {/* Organic Hand-Drawn Accent Lines (Reference Style) */}
+        {/* Subtle decorative curves */}
         <div className="absolute inset-0 pointer-events-none opacity-40 dark:opacity-20 z-0 overflow-hidden">
           <svg className="w-full h-full" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M-100 250C300 120 700 480 1200 180C1400 60 1550 320 1600 500" stroke="#FDE047" strokeWidth="2" strokeLinecap="round" />
@@ -188,63 +185,68 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             
-            {/* Left Headline & Editorial Description */}
+            {/* Left Headline & Academic Subtitle */}
             <div className="lg:col-span-6 space-y-6 sm:space-y-8">
               
               <div className="inline-flex items-center gap-2">
-                <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl leading-[1.04] tracking-[-0.03em] font-normal text-[var(--ink)]">
-                  Academic Workspaces
+                <h1 className="font-sans font-bold text-4xl sm:text-6xl lg:text-7xl leading-[1.04] tracking-[-0.03em] text-[var(--ink)]">
+                  The private campus hub for your university.
                 </h1>
-                <span className="inline-flex items-center gap-1 text-2xl sm:text-3xl select-none" aria-hidden="true">
-                  <span className="text-[#F99D64] font-bold">&#10038;</span>
-                  <span className="text-[#0F3D91] dark:text-[#3B82F6] font-bold">&#10038;</span>
-                </span>
               </div>
 
               <p className="text-base sm:text-lg text-[var(--ink-muted)] leading-relaxed max-w-xl font-normal">
-                Join your university&apos;s isolated academic network. Connect faculties, accredited curricula, and student cohorts with automated syllabus indexing, immutable versioning, and zero cross-institutional data leakage.
+                Where students access verified lecture notes, professors organize course syllabi, and departments organize learning materials in one private space.
               </p>
 
               {/* Action CTAs */}
               <div className="flex flex-wrap items-center gap-3.5 pt-2">
                 <button
                   type="button"
-                  onClick={() => openAuth("signup")}
+                  onClick={() => setShowWorkspaceRequestModal(true)}
                   className="rounded-full bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] px-7 py-3.5 text-sm font-semibold tracking-tight transition-all shadow-md cursor-pointer"
                 >
-                  Get Started
+                  Join Your University
                 </button>
                 <button
                   type="button"
                   onClick={() => { if (onEnterWorkspace) onEnterWorkspace(); else openAuth("login"); }}
                   className="rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] hover:border-[var(--ink)] px-6 py-3.5 text-sm font-semibold transition-colors cursor-pointer"
                 >
-                  Enter Existing School Portal
+                  Open Campus Portal
                 </button>
               </div>
 
-              {/* Floating Angled Tags (Matching Reference Visual) */}
-              <div className="pt-4 flex flex-wrap items-center gap-2.5">
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#FDE047] text-[#4A3B00] shadow-sm transform -rotate-1 hover:rotate-0 transition-transform">
-                  <span>#</span> CurriculumSync
+              {/* Role-Specific Highlights */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-[var(--border)]">
+                <div className="space-y-1">
+                  <span className="text-xs font-semibold text-[var(--ink)]">For Students</span>
+                  <p className="text-xs text-[var(--ink-muted)] leading-normal">
+                    Verified course syllabi, past exam papers, and class notes in one clean library.
+                  </p>
                 </div>
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#D8B4F8] text-[#3B125E] shadow-sm transform rotate-2 hover:rotate-0 transition-transform">
-                  <span>#</span> AccreditedPrograms
+                <div className="space-y-1">
+                  <span className="text-xs font-semibold text-[var(--ink)]">For Lecturers</span>
+                  <p className="text-xs text-[var(--ink-muted)] leading-normal">
+                    Update reading lists once, manage roll call, and notify your cohorts instantly.
+                  </p>
                 </div>
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#FBA774] text-[#4D1C08] shadow-sm transform -rotate-2 hover:rotate-0 transition-transform">
-                  <span>#</span> TenantIsolation
+                <div className="space-y-1">
+                  <span className="text-xs font-semibold text-[var(--ink)]">For Universities</span>
+                  <p className="text-xs text-[var(--ink-muted)] leading-normal">
+                    A private academic hub reserved strictly for enrolled students and faculty.
+                  </p>
                 </div>
               </div>
 
             </div>
 
-            {/* Right: Large Squircle Hero Frame & Inset Visual (Matching Image 1 & 4) */}
+            {/* Right: Squircle Hero Frame & Inset Academic Preview */}
             <div className="lg:col-span-6 relative">
               
-              {/* Main Rounded Hero Frame */}
+              {/* Main Rounded Frame */}
               <div className="relative rounded-[2.5rem] bg-[#0E2038] dark:bg-[#081324] border border-[#1A385E] p-5 sm:p-7 shadow-2xl overflow-hidden">
                 
-                {/* Photo Cutout Frame */}
+                {/* Photo Frame */}
                 <div className="relative rounded-[2rem] overflow-hidden aspect-[4/3] bg-neutral-900 border border-white/10 shadow-inner group">
                   <img
                     src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=80"
@@ -254,21 +256,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                   
-                  {/* Floating Inset Program Pill on the Image */}
+                  {/* Floating Inset Course Pill */}
                   <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs text-white">
                     <span className="bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full font-medium">
-                      INES Applied Sciences Cohort 2026
+                      INES Applied Sciences &bull; Cohort 2026
                     </span>
                     <span className="bg-[#86EFAC] text-[#0A2E14] font-semibold px-2.5 py-1 rounded-full text-[11px]">
-                      Active Sync
+                      Active Semester
                     </span>
                   </div>
                 </div>
 
-                {/* Bottom Widget Rail: Group Stat Card + Asterisk Squircle Seal */}
+                {/* Bottom Widget Rail: Cohort Card + Seal */}
                 <div className="mt-5 grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-center">
                   
-                  {/* Group Stat Pill Card (Matching Image 1) */}
+                  {/* Cohort Summary Card */}
                   <div className="sm:col-span-8 rounded-2xl bg-[#FBA774] p-4 flex items-center justify-between gap-3 shadow-md">
                     <div className="space-y-1">
                       <div className="flex items-center -space-x-2">
@@ -276,11 +278,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
                         <img className="w-7 h-7 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Student" />
                         <img className="w-7 h-7 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Student" />
                       </div>
-                      <div className="font-display text-lg font-bold text-[#3D1407]">
+                      <div className="font-sans text-base font-bold text-[#3D1407]">
                         Cohort B2 &bull; Faculty of Sciences
                       </div>
                       <div className="text-xs text-[#3D1407]/80 font-medium tabular-nums">
-                        Enrolled Students: 34 &bull; 14 Active Syllabi
+                        34 Enrolled Students &bull; 14 Verified Syllabi
                       </div>
                     </div>
 
@@ -288,7 +290,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
                       type="button"
                       onClick={() => openAuth("login")}
                       aria-label="Open Cohort Roster"
-                      className="w-10 h-10 rounded-full bg-white text-[#3D1407] hover:scale-110 flex items-center justify-center transition-all cursor-pointer shadow-sm shrink-0"
+                      className="w-10 h-10 rounded-full bg-white text-[#3D1407] hover:scale-110 flex items-center justify-center transition-all cursor-pointer shadow-xs shrink-0"
                     >
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M7 17L17 7M17 7H7M17 7V17" />
@@ -296,11 +298,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
                     </button>
                   </div>
 
-                  {/* Soft Lime Asterisk Squircle Seal (Matching Image 1 & 4) */}
+                  {/* Seal */}
                   <div className="sm:col-span-4 rounded-2xl bg-[#D4F49C] h-full min-h-[96px] p-4 flex flex-col items-center justify-center shadow-md text-center">
                     <span className="text-3xl font-extrabold text-[#0E2038] select-none leading-none">&#10038;</span>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#0E2038] mt-1.5">
-                      Sovra Seal
+                      Sovra Verified
                     </span>
                   </div>
 
@@ -314,383 +316,442 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
         </div>
       </section>
 
-      {/* 3. "Directions of Education" Section (Matching Reference Image 2 & 3) */}
-      <section id="directions" className="py-16 sm:py-24 border-b border-[var(--border)] bg-[var(--surface)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-            <div className="max-w-2xl space-y-3">
-              <div className="inline-flex items-center gap-2">
-                <span className="w-7 h-7 rounded-full bg-[#0E2038] text-[#D4F49C] flex items-center justify-center text-sm font-bold select-none">
-                  &#10038;
-                </span>
-                <span className="text-xs font-semibold uppercase tracking-wider text-[var(--ink-muted)]">
-                  Accredited Academic Pathways
-                </span>
-              </div>
-              <h2 className="font-display text-3xl sm:text-5xl text-[var(--ink)] tracking-tight">
-                Directions of education
-              </h2>
-              <p className="text-sm sm:text-base text-[var(--ink-muted)] leading-relaxed">
-                At our partner institutions, faculties offer extensive pathways and specialized disciplines. Every curriculum is indexed with real-time syllabus versioning and continuous accreditation audits.
-              </p>
-            </div>
-
-            {/* Quick Carousel / Tabs Navigation */}
-            <div className="flex items-center gap-2">
-              {directions.map((_, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => setSelectedDirectionTab(idx)}
-                  className={`h-2.5 rounded-full transition-all cursor-pointer ${
-                    selectedDirectionTab === idx ? "w-8 bg-[var(--accent)]" : "w-2.5 bg-[var(--border)] hover:bg-[var(--ink-muted)]"
-                  }`}
-                  aria-label={`Select program ${idx + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* 3 Large Rounded Cards (Matching Image 3) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {directions.map((dir, idx) => (
-              <div
-                key={idx}
-                className={`relative rounded-[2.25rem] border ${dir.borderClass} ${dir.bgClass} p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group`}
-              >
-                <div>
-                  {/* Top Bar with Badge + Diagonal Arrow Button */}
-                  <div className="flex items-center justify-between mb-6">
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${dir.tagColor}`}>
-                      {dir.badge}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => openAuth("login")}
-                      aria-label={`Explore ${dir.title}`}
-                      className={`w-9 h-9 rounded-full ${dir.arrowBg} flex items-center justify-center hover:scale-110 transition-transform cursor-pointer shadow-sm`}
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M7 17L17 7M17 7H7M17 7V17" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Title & Duration */}
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-1">
-                    {dir.title}
-                  </h3>
-                  <div className="text-xs font-medium opacity-80 mb-4">
-                    {dir.duration}
-                  </div>
-                  <p className="text-xs leading-relaxed opacity-90 mb-6">
-                    {dir.description}
-                  </p>
-                </div>
-
-                {/* Rounded Photo Inset */}
-                <div className="rounded-2xl overflow-hidden aspect-[16/10] bg-black/10 border border-black/5 mt-auto">
-                  <img
-                    src={dir.image}
-                    alt={dir.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-      {/* 4. "Make Together" / Collaborative Academic Canvas (Matching Reference Image 5) */}
-      <section id="collaboration" className="py-16 sm:py-24 border-b border-[var(--border)] bg-[var(--bg)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <h2 className="font-display text-4xl sm:text-6xl text-[var(--ink)] tracking-tight">
-              # Make together
-            </h2>
-            <p className="text-sm sm:text-base text-[var(--ink-muted)] leading-relaxed">
-              Engage in the dynamic world of collaborative curriculum drafting and joint academic review. With live group sessions, faculty departments and accreditation boards craft verified educational standards together.
-            </p>
-          </div>
-
-          {/* Interactive Collaborative Whiteboard Canvas */}
-          <div className="relative max-w-5xl mx-auto rounded-[2.5rem] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-10 shadow-lg overflow-hidden">
-            
-            {/* Top Canvas Toolbar */}
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-6">
-              
-              {/* Tool Selector Pill */}
-              <div className="flex items-center gap-1.5 bg-[var(--bg)] border border-[var(--border)] rounded-full px-3 py-1.5 shadow-xs">
-                <button
-                  type="button"
-                  onClick={() => setCanvasActiveTool("pen")}
-                  aria-label="Draw Annotation Pen"
-                  className={`p-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
-                    canvasActiveTool === "pen" ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
-                  }`}
-                  title="Draw Annotation Pen"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCanvasActiveTool("highlight")}
-                  aria-label="Highlighter Tool"
-                  className={`p-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
-                    canvasActiveTool === "highlight" ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
-                  }`}
-                  title="Highlighter"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCanvasActiveTool("stamp")}
-                  aria-label="Accreditation Seal Stamp"
-                  className={`p-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
-                    canvasActiveTool === "stamp" ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
-                  }`}
-                  title="Accreditation Seal Stamp"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCanvasNotes([])}
-                  aria-label="Clear all canvas annotations"
-                  className="p-1.5 rounded-full text-xs text-[var(--ink-muted)] hover:text-red-500 transition-colors cursor-pointer"
-                  title="Clear annotations"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Live Session Status */}
-              <div className="flex items-center gap-3 text-xs">
-                <span className="flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Live Sync (3 Faculty Active)
-                </span>
-              </div>
-
-            </div>
-
-            {/* Interactive Canvas Area */}
-            <div
-              role="region"
-              aria-label="Interactive academic review whiteboard canvas"
-              tabIndex={0}
-              onClick={addCanvasNote}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  const newNote = {
-                    id: Date.now(),
-                    text: "Verified syllabus learning objective",
-                    x: 50,
-                    y: 50,
-                    author: "You (Active Reviewer)",
-                    color: canvasActiveTool === "pen" ? "#86EFAC" : canvasActiveTool === "highlight" ? "#FDE047" : "#BAE0FD"
-                  };
-                  setCanvasNotes(prev => [...prev.slice(-3), newNote]);
-                }
-              }}
-              className="relative w-full h-80 sm:h-96 rounded-2xl bg-[var(--bg)] border border-dashed border-[var(--border)] overflow-hidden cursor-crosshair select-none focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
-            >
-              
-              {/* Subtle Grid Pattern */}
-              <div className="absolute inset-0 opacity-15 dark:opacity-10 bg-[radial-gradient(#888_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-
-              {/* Hand-Drawn Stroke Simulation (Matching Image 5) */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 800 400" fill="none">
-                <path
-                  d="M150 200 C 260 260, 360 140, 480 210 S 660 180, 720 160"
-                  stroke="#EAB308"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="opacity-75"
-                />
-              </svg>
-
-              {/* Active User Cursor 1: Jane Cooper (Lavender) */}
-              <div className="absolute top-[28%] left-[18%] -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none transition-all duration-700 animate-pulse">
-                <div className="flex items-center gap-1.5 bg-[#D8B4F8] text-[#3B125E] font-semibold text-xs px-3 py-1.5 rounded-full shadow-md">
-                  <img className="w-4 h-4 rounded-full object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=60&q=80" alt="Jane" />
-                  Jane Cooper (Dean)
-                </div>
-                <div className="w-2.5 h-2.5 rounded-full bg-[#D8B4F8]" />
-              </div>
-
-              {/* Active User Cursor 2: Jenny Wilson (Orange) */}
-              <div className="absolute top-[42%] right-[22%] translate-x-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none transition-all duration-700">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#FBA774]" />
-                <div className="flex items-center gap-1.5 bg-[#FBA774] text-[#3D1407] font-semibold text-xs px-3 py-1.5 rounded-full shadow-md">
-                  <img className="w-4 h-4 rounded-full object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=60&q=80" alt="Jenny" />
-                  Jenny Wilson (Curriculum Chair)
-                </div>
-              </div>
-
-              {/* Active User Cursor 3: Leslie Alexander (Dark Green) */}
-              <div className="absolute bottom-[20%] right-[32%] flex items-center gap-2 pointer-events-none transition-all duration-700">
-                <div className="flex items-center gap-1.5 bg-[#0E2038] text-[#D4F49C] font-semibold text-xs px-3 py-1.5 rounded-full shadow-md">
-                  <img className="w-4 h-4 rounded-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=60&q=80" alt="Leslie" />
-                  Leslie Alexander (Auditor)
-                </div>
-              </div>
-
-              {/* Dynamic Placed Annotation Pins */}
-              {canvasNotes.map((note) => (
-                <div
-                  key={note.id}
-                  style={{ top: `${note.y}%`, left: `${note.x}%` }}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 z-10"
-                >
-                  <div
-                    style={{ backgroundColor: note.color }}
-                    className="text-black text-xs font-semibold px-3 py-1.5 rounded-xl shadow-lg border border-black/10 flex items-center gap-1.5"
-                  >
-                    <span>&#9998;</span>
-                    <span>{note.text}</span>
-                  </div>
-                </div>
-              ))}
-
-              {/* Hint Overlay */}
-              <div className="absolute bottom-3 left-4 text-[11px] text-[var(--ink-muted)] pointer-events-none">
-                Click anywhere on canvas to drop a peer review feedback pin
-              </div>
-
-            </div>
-
-            {/* Bottom Inset Seal & Callout (Matching Reference Image 5) */}
-            <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[var(--border)] text-xs text-[var(--ink-muted)]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#0E2038] text-[#D4F49C] flex items-center justify-center font-bold text-lg select-none">
-                  &#10038;
-                </div>
-                <span>
-                  Join the Academic Board &bull; Peer review syllabi before semester publishing
-                </span>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => openAuth("login")}
-                className="btn-accent px-5 py-2 text-xs font-semibold rounded-full cursor-pointer"
-              >
-                Join Collaborative Session
-              </button>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* 5. Cryptographic Tenant Isolation Showcase (Interactive Diagram) */}
-      <section id="architecture" className="border-b border-[var(--border)] py-16 sm:py-24">
+      {/* 3. Product Section: Dedicated Campus Spaces (#product) */}
+      <section id="product" className="py-16 sm:py-24 border-b border-[var(--border)] bg-[var(--surface)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           
           <div className="max-w-3xl space-y-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">
-              Zero-Trust Architecture
+              Product Overview
             </span>
-            <h2 className="font-display text-3xl sm:text-5xl text-[var(--ink)] tracking-tight">
-              Cryptographic boundary isolation across universities
+            <h2 className="font-sans font-bold text-3xl sm:text-5xl text-[var(--ink)] tracking-[-0.03em]">
+              Dedicated campus spaces for every school
             </h2>
             <p className="text-sm sm:text-base text-[var(--ink-muted)] leading-relaxed">
-              Every institution deployed on Sovra operates as a dedicated logical partition. Faculty evaluations, student submissions, examination keys, and lecture archives are bound to the school&apos;s unique workspace identifier, backed by strict PostgreSQL Row-Level Security policies.
+              Every university on Sovra receives its own dedicated digital campus. Course materials, student records, and faculty reviews remain completely private to your institution—accessible only by verified campus email addresses.
             </p>
           </div>
 
-          {/* Interactive Multi-Tenant Diagram Component */}
+          {/* Interactive Campus Spaces Diagram */}
           <TenantIsolationDiagram />
 
         </div>
       </section>
 
-      {/* 6. Isolated School Workspace Showcase (Editorial Split-Grid) */}
-      <section id="workspaces" className="border-b border-[var(--border)] py-16 sm:py-24 bg-[var(--surface)]">
+      {/* 4. Features Section: Core Academic Pillars (#features) */}
+      <section id="features" className="py-16 sm:py-24 border-b border-[var(--border)] bg-[var(--bg)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+          
+          <div className="max-w-3xl space-y-3">
+            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">
+              Features
+            </span>
+            <h2 className="font-sans font-bold text-3xl sm:text-5xl text-[var(--ink)] tracking-[-0.03em]">
+              Everything students and faculty need to excel
+            </h2>
+            <p className="text-sm sm:text-base text-[var(--ink-muted)] leading-relaxed">
+              Designed around the everyday needs of university life—from first-day syllabus orientation to final exam revision.
+            </p>
+          </div>
+
+          {/* 4 Core Pillars Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* Pillar 1 */}
+            <div className="p-8 sm:p-10 rounded-3xl border border-[var(--border)] bg-[var(--surface)] space-y-4 hover:border-[var(--accent)] transition-colors">
+              <span className="font-sans text-2xl font-bold text-[var(--ink)] tracking-tight">01 / Verified Course Syllabi & Schedules</span>
+              <p className="text-sm text-[var(--ink-muted)] leading-relaxed">
+                Clear course outlines, lecture schedules, credit requirements, and official office hours maintained by your professors. Always know what is expected each week.
+              </p>
+              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-2 border-t border-[var(--border)]">
+                <li>&bull; Instant access to learning objectives and grading criteria</li>
+                <li>&bull; Automatically updated weekly lecture topics and reading lists</li>
+                <li>&bull; Linked prerequisite requirements for graduation tracking</li>
+              </ul>
+            </div>
+
+            {/* Pillar 2 */}
+            <div className="p-8 sm:p-10 rounded-3xl border border-[var(--border)] bg-[var(--surface)] space-y-4 hover:border-[var(--accent)] transition-colors">
+              <span className="font-sans text-2xl font-bold text-[var(--ink)] tracking-tight">02 / Shared Department Resource Library</span>
+              <p className="text-sm text-[var(--ink-muted)] leading-relaxed">
+                Official lecture slides, required textbook chapters, sample lab exercises, and past exam guides organized by semester and course code.
+              </p>
+              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-2 border-t border-[var(--border)]">
+                <li>&bull; Searchable documents across departments and faculties</li>
+                <li>&bull; Verified lecture notes approved directly by teaching staff</li>
+                <li>&bull; Downloadable files for uninterrupted offline study</li>
+              </ul>
+            </div>
+
+            {/* Pillar 3 */}
+            <div className="p-8 sm:p-10 rounded-3xl border border-[var(--border)] bg-[var(--surface)] space-y-4 hover:border-[var(--accent)] transition-colors">
+              <span className="font-sans text-2xl font-bold text-[var(--ink)] tracking-tight">03 / Cohort Discussions & Live Roll Call</span>
+              <p className="text-sm text-[var(--ink-muted)] leading-relaxed">
+                Fast roll call during lectures with simple time-limited codes, combined with course discussion boards where classmates and teaching assistants answer questions.
+              </p>
+              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-2 border-t border-[var(--border)]">
+                <li>&bull; Quick attendance verification on your phone or laptop</li>
+                <li>&bull; Classmate study groups organized by academic year</li>
+                <li>&bull; Direct announcements from class representatives and professors</li>
+              </ul>
+            </div>
+
+            {/* Pillar 4 */}
+            <div className="p-8 sm:p-10 rounded-3xl border border-[var(--border)] bg-[var(--surface)] space-y-4 hover:border-[var(--accent)] transition-colors">
+              <span className="font-sans text-2xl font-bold text-[var(--ink)] tracking-tight">04 / Instant Campus Updates & Reading Lists</span>
+              <p className="text-sm text-[var(--ink-muted)] leading-relaxed">
+                When a professor updates an assignment deadline or uploads new study materials, enrolled students receive clear notifications without relying on noisy chat groups.
+              </p>
+              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-2 border-t border-[var(--border)]">
+                <li>&bull; Real-time notifications for schedule or venue changes</li>
+                <li>&bull; Track revised reading lists and supplementary lecture slides</li>
+                <li>&bull; Centralized academic calendar synced to semester dates</li>
+              </ul>
+            </div>
+
+          </div>
+
+          {/* Interactive Document Lifecycle Diagram */}
+          <div className="space-y-6 pt-8 border-t border-[var(--border)]">
+            <div className="max-w-2xl space-y-2">
+              <h3 className="font-sans font-bold text-2xl sm:text-3xl text-[var(--ink)] tracking-[-0.03em]">
+                How course materials move through your university
+              </h3>
+              <p className="text-xs sm:text-sm text-[var(--ink-muted)] leading-relaxed">
+                From a lecturer&apos;s initial syllabus draft to faculty review and instant student delivery across the campus.
+              </p>
+            </div>
+            <AcademicDocPipelineDiagram />
+          </div>
+
+          {/* Directions of Study (Curricula Showcase) */}
+          <div className="space-y-8 pt-8 border-t border-[var(--border)]">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div className="max-w-2xl space-y-2">
+                <h3 className="font-sans font-bold text-2xl sm:text-3xl text-[var(--ink)] tracking-[-0.03em]">
+                  Featured academic directions
+                </h3>
+                <p className="text-xs sm:text-sm text-[var(--ink-muted)] leading-relaxed">
+                  Accredited curricula designed for hands-on learning and professional preparation.
+                </p>
+              </div>
+
+              {/* Quick Carousel / Tabs */}
+              <div className="flex items-center gap-2">
+                {directions.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setSelectedDirectionTab(idx)}
+                    className={`h-2.5 rounded-full transition-all cursor-pointer ${
+                      selectedDirectionTab === idx ? "w-8 bg-[var(--accent)]" : "w-2.5 bg-[var(--border)] hover:bg-[var(--ink-muted)]"
+                    }`}
+                    aria-label={`Select program ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* 3 Program Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+              {directions.map((dir, idx) => (
+                <div
+                  key={idx}
+                  className={`relative rounded-[2.25rem] border ${dir.borderClass} ${dir.bgClass} p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-6">
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${dir.tagColor}`}>
+                        {dir.badge}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => openAuth("login")}
+                        aria-label={`Explore ${dir.title}`}
+                        className={`w-9 h-9 rounded-full ${dir.arrowBg} flex items-center justify-center hover:scale-110 transition-transform cursor-pointer shadow-xs`}
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M7 17L17 7M17 7H7M17 7V17" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <h4 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight mb-1">
+                      {dir.title}
+                    </h4>
+                    <div className="text-xs font-medium opacity-80 mb-4">
+                      {dir.duration}
+                    </div>
+                    <p className="text-xs leading-relaxed opacity-90 mb-6">
+                      {dir.description}
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl overflow-hidden aspect-[16/10] bg-black/10 border border-black/5 mt-auto">
+                    <img
+                      src={dir.image}
+                      alt={dir.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Collaborative Academic Whiteboard */}
+          <div className="space-y-6 pt-8 border-t border-[var(--border)]">
+            <div className="text-center max-w-2xl mx-auto space-y-2">
+              <h3 className="font-sans font-bold text-2xl sm:text-4xl text-[var(--ink)] tracking-[-0.03em]">
+                Collaborative curriculum review
+              </h3>
+              <p className="text-xs sm:text-sm text-[var(--ink-muted)] leading-relaxed">
+                Faculty boards and lecturers review learning objectives together before releasing course materials to students.
+              </p>
+            </div>
+
+            {/* Interactive Whiteboard Canvas */}
+            <div className="relative max-w-5xl mx-auto rounded-[2.5rem] border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-10 shadow-lg overflow-hidden">
+              
+              <div className="flex items-center justify-between border-b border-[var(--border)] pb-4 mb-6">
+                <div className="flex items-center gap-1.5 bg-[var(--bg)] border border-[var(--border)] rounded-full px-3 py-1.5 shadow-xs">
+                  <button
+                    type="button"
+                    onClick={() => setCanvasActiveTool("pen")}
+                    aria-label="Draw Annotation Pen"
+                    className={`p-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
+                      canvasActiveTool === "pen" ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
+                    }`}
+                    title="Pen"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCanvasActiveTool("highlight")}
+                    aria-label="Highlighter Tool"
+                    className={`p-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
+                      canvasActiveTool === "highlight" ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
+                    }`}
+                    title="Highlighter"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCanvasActiveTool("stamp")}
+                    aria-label="Approval Seal"
+                    className={`p-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
+                      canvasActiveTool === "stamp" ? "bg-[var(--accent)] text-white" : "text-[var(--ink-muted)] hover:text-[var(--ink)]"
+                    }`}
+                    title="Approval Seal"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCanvasNotes([])}
+                    aria-label="Clear annotations"
+                    className="p-1.5 rounded-full text-xs text-[var(--ink-muted)] hover:text-red-500 transition-colors cursor-pointer"
+                    title="Clear"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-3 text-xs">
+                  <span className="flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    3 Faculty Reviewers Active
+                  </span>
+                </div>
+              </div>
+
+              {/* Whiteboard Canvas */}
+              <div
+                role="region"
+                aria-label="Interactive academic review canvas"
+                tabIndex={0}
+                onClick={addCanvasNote}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    const newNote = {
+                      id: Date.now(),
+                      text: "Verified syllabus learning objective",
+                      x: 50,
+                      y: 50,
+                      author: "You (Reviewer)",
+                      color: canvasActiveTool === "pen" ? "#86EFAC" : canvasActiveTool === "highlight" ? "#FDE047" : "#BAE0FD"
+                    };
+                    setCanvasNotes(prev => [...prev.slice(-3), newNote]);
+                  }
+                }}
+                className="relative w-full h-80 sm:h-96 rounded-2xl bg-[var(--bg)] border border-dashed border-[var(--border)] overflow-hidden cursor-crosshair select-none focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+              >
+                <div className="absolute inset-0 opacity-15 dark:opacity-10 bg-[radial-gradient(#888_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+
+                <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 800 400" fill="none">
+                  <path
+                    d="M150 200 C 260 260, 360 140, 480 210 S 660 180, 720 160"
+                    stroke="#EAB308"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="opacity-75"
+                  />
+                </svg>
+
+                {/* Simulated Reviewer 1 */}
+                <div className="absolute top-[28%] left-[18%] -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none transition-all duration-700 animate-pulse">
+                  <div className="flex items-center gap-1.5 bg-[#D8B4F8] text-[#3B125E] font-semibold text-xs px-3 py-1.5 rounded-full shadow-md">
+                    <img className="w-4 h-4 rounded-full object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=60&q=80" alt="Jane" />
+                    Dr. Jane Cooper (Dean)
+                  </div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#D8B4F8]" />
+                </div>
+
+                {/* Simulated Reviewer 2 */}
+                <div className="absolute top-[42%] right-[22%] translate-x-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none transition-all duration-700">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#FBA774]" />
+                  <div className="flex items-center gap-1.5 bg-[#FBA774] text-[#3D1407] font-semibold text-xs px-3 py-1.5 rounded-full shadow-md">
+                    <img className="w-4 h-4 rounded-full object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=60&q=80" alt="Jenny" />
+                    Prof. Jenny Wilson (Curriculum Chair)
+                  </div>
+                </div>
+
+                {/* Dynamic Placed Pins */}
+                {canvasNotes.map((note) => (
+                  <div
+                    key={note.id}
+                    style={{ top: `${note.y}%`, left: `${note.x}%` }}
+                    className="absolute -translate-x-1/2 -translate-y-1/2 z-10"
+                  >
+                    <div
+                      style={{ backgroundColor: note.color }}
+                      className="text-black text-xs font-semibold px-3 py-1.5 rounded-xl shadow-lg border border-black/10 flex items-center gap-1.5"
+                    >
+                      <span>&#9998;</span>
+                      <span>{note.text}</span>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="absolute bottom-3 left-4 text-[11px] text-[var(--ink-muted)] pointer-events-none">
+                  Click anywhere to add a peer review feedback note
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-[var(--border)] text-xs text-[var(--ink-muted)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-[#0E2038] text-[#D4F49C] flex items-center justify-center font-bold text-base select-none">
+                    &#10038;
+                  </div>
+                  <span>
+                    Faculty Curriculum Board &bull; Review course learning outcomes before semester start
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => openAuth("login")}
+                  className="rounded-full bg-[var(--accent)] text-white px-5 py-2 text-xs font-semibold cursor-pointer"
+                >
+                  Join Department Review
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. Future Products Section (#future) */}
+      <section id="future" className="py-16 sm:py-24 border-b border-[var(--border)] bg-[var(--surface)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           
           <div className="max-w-3xl space-y-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">
-              Modular Infrastructure
+              Future Products
             </span>
-            <h2 className="font-display text-3xl sm:text-5xl text-[var(--ink)] tracking-tight">
-              Four unified quadrants in every institutional workspace
+            <h2 className="font-sans font-bold text-3xl sm:text-5xl text-[var(--ink)] tracking-[-0.03em]">
+              Upcoming academic innovations
             </h2>
             <p className="text-sm sm:text-base text-[var(--ink-muted)] leading-relaxed">
-              Sovra replaces scattered learning management systems, unversioned PDF email chains, and manual paper registries with a single verified institutional workspace.
+              New capabilities currently in development to further empower students and educators across partner campuses.
             </p>
           </div>
 
-          {/* Editorial Split-Grid with Hairline Borders */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* 3 Future Product Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             
-            {/* Quadrant 1 */}
-            <div className="p-8 sm:p-10 rounded-3xl border border-[var(--border)] bg-[var(--bg)] space-y-4 hover:border-[var(--accent)] transition-colors">
-              <span className="font-display text-2xl text-[var(--ink)]">01 / Student Directory & Cohort Portals</span>
-              <p className="text-sm text-[var(--ink-muted)] leading-relaxed">
-                Automated student profiles linked to academic degree tracks, enrollment years, and course assignments. Cohorts access verified class rosters, discussion boards, and attendance logs without administrative friction.
-              </p>
-              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-2 border-t border-[var(--border)]">
-                <li>&bull; SSO login matching university email domains (.ac.rw, .edu)</li>
-                <li>&bull; Academic year level gating (Year 1 through Final Clinical Year)</li>
-                <li>&bull; Self-service student verification and ID tracking</li>
+            {/* Future Product 1 */}
+            <div className="p-8 rounded-3xl border border-[var(--border)] bg-[var(--bg)] flex flex-col justify-between space-y-6 hover:border-[var(--accent)] transition-colors">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#D8B4F8]/20 text-[#6B21A8] dark:text-[#D8B4F8] border border-[#D8B4F8]/40">
+                  Coming Fall 2026
+                </div>
+                <h3 className="font-sans font-bold text-xl sm:text-2xl text-[var(--ink)] tracking-tight">
+                  AI Study & Citation Companion
+                </h3>
+                <p className="text-xs sm:text-sm text-[var(--ink-muted)] leading-relaxed">
+                  Context-aware study guides, citation formatting (APA, IEEE, Harvard), and syllabus review assistants grounded strictly in your lecturer&apos;s verified materials.
+                </p>
+              </div>
+              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-4 border-t border-[var(--border)]">
+                <li>&bull; Practice quizzes generated from lecture notes</li>
+                <li>&bull; Automatic citation checking for thesis drafts</li>
+                <li>&bull; Strict grounding to university course content</li>
               </ul>
             </div>
 
-            {/* Quadrant 2 */}
-            <div className="p-8 sm:p-10 rounded-3xl border border-[var(--border)] bg-[var(--bg)] space-y-4 hover:border-[var(--accent)] transition-colors">
-              <span className="font-display text-2xl text-[var(--ink)]">02 / Faculty Curricula & Accreditation Records</span>
-              <p className="text-sm text-[var(--ink-muted)] leading-relaxed">
-                Lecturers and department deans maintain live, structured curricula aligned with national accreditation boards. Every course change is indexed with learning milestones, credit hours, and prerequisite dependencies.
-              </p>
-              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-2 border-t border-[var(--border)]">
-                <li>&bull; Automated syllabus structure extraction and validation</li>
-                <li>&bull; Departmental peer review sign-offs before public publication</li>
-                <li>&bull; Real-time alignment with regulatory audit requirements</li>
+            {/* Future Product 2 */}
+            <div className="p-8 rounded-3xl border border-[var(--border)] bg-[var(--bg)] flex flex-col justify-between space-y-6 hover:border-[var(--accent)] transition-colors">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#86EFAC]/20 text-[#166534] dark:text-[#86EFAC] border border-[#86EFAC]/40">
+                  In Development
+                </div>
+                <h3 className="font-sans font-bold text-xl sm:text-2xl text-[var(--ink)] tracking-tight">
+                  Cross-University Research Exchange
+                </h3>
+                <p className="text-xs sm:text-sm text-[var(--ink-muted)] leading-relaxed">
+                  A verified inter-institutional network allowing researchers and postgraduate candidates to discover open datasets and share peer-reviewed findings across accredited campuses.
+                </p>
+              </div>
+              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-4 border-t border-[var(--border)]">
+                <li>&bull; Inter-campus faculty collaboration spaces</li>
+                <li>&bull; Open access publication repository</li>
+                <li>&bull; Verified institutional peer reviews</li>
               </ul>
             </div>
 
-            {/* Quadrant 3 */}
-            <div className="p-8 sm:p-10 rounded-3xl border border-[var(--border)] bg-[var(--bg)] space-y-4 hover:border-[var(--accent)] transition-colors">
-              <span className="font-display text-2xl text-[var(--ink)]">03 / Curated Resource Vault & Compendiums</span>
-              <p className="text-sm text-[var(--ink-muted)] leading-relaxed">
-                Lecturers publish official lecture notes, reference textbooks, past examination papers, and clinical manuals directly into the course vault. Students download verified materials with complete confidence in accuracy.
-              </p>
-              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-2 border-t border-[var(--border)]">
-                <li>&bull; Multi-format support: PDF, DOCX, presentation slides, lab sheets</li>
-                <li>&bull; Instant download tracking and lecturer publication approvals</li>
-                <li>&bull; Automated compendium generation for offline study</li>
-              </ul>
-            </div>
-
-            {/* Quadrant 4 */}
-            <div className="p-8 sm:p-10 rounded-3xl border border-[var(--border)] bg-[var(--bg)] space-y-4 hover:border-[var(--accent)] transition-colors">
-              <span className="font-display text-2xl text-[var(--ink)]">04 / Automated Passcode Attendance Registry</span>
-              <p className="text-sm text-[var(--ink-muted)] leading-relaxed">
-                Lecturers and class representatives open time-slotted roll call sessions verified by dynamic passcodes and institutional location checks. Eliminates paper sign-in sheets and ensures transparent attendance records.
-              </p>
-              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-2 border-t border-[var(--border)]">
-                <li>&bull; Time-bounded passcode validation per lecture session</li>
-                <li>&bull; One-click attendance roster export for faculty boards</li>
-                <li>&bull; Automated absence diagnostics and dean notifications</li>
+            {/* Future Product 3 */}
+            <div className="p-8 rounded-3xl border border-[var(--border)] bg-[var(--bg)] flex flex-col justify-between space-y-6 hover:border-[var(--accent)] transition-colors">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FDE047]/20 text-[#854D0E] dark:text-[#FDE047] border border-[#FDE047]/40">
+                  Design Phase
+                </div>
+                <h3 className="font-sans font-bold text-xl sm:text-2xl text-[var(--ink)] tracking-tight">
+                  Automated Exam & Curriculum Planner
+                </h3>
+                <p className="text-xs sm:text-sm text-[var(--ink-muted)] leading-relaxed">
+                  Intelligent course scheduling, conflict-free exam timetabling, and accredited credit tracking across academic semesters to ensure smooth graduation.
+                </p>
+              </div>
+              <ul className="text-xs text-[var(--ink-muted)] space-y-2 pt-4 border-t border-[var(--border)]">
+                <li>&bull; Conflict-free examination room scheduling</li>
+                <li>&bull; Automatic credit audit toward graduation</li>
+                <li>&bull; Department workload balancing tools</li>
               </ul>
             </div>
 
@@ -699,78 +760,113 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
         </div>
       </section>
 
-      {/* 7. Academic Documentation Pipeline Section (Interactive Diagram) */}
-      <section id="pipeline" className="border-b border-[var(--border)] py-16 sm:py-24 bg-[var(--bg)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          
-          <div className="max-w-3xl space-y-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">
-              Automated Lifecycle
-            </span>
-            <h2 className="font-display text-3xl sm:text-5xl text-[var(--ink)] tracking-tight">
-              The academic documentation lifecycle, automated
-            </h2>
-            <p className="text-sm sm:text-base text-[var(--ink-muted)] leading-relaxed">
-              From the moment a syllabus draft is authored to its distribution across student cohorts, Sovra ensures every document is cryptographically verified, version-controlled, and instantly retrievable.
-            </p>
-          </div>
-
-          {/* Interactive Pipeline Diagram Component */}
-          <AcademicDocPipelineDiagram />
-
-        </div>
-      </section>
-
-      {/* 8. Institutional Metrics & Final Invitation */}
-      <section className="py-20 sm:py-28 bg-[var(--surface)]">
+      {/* 6. About Section: Mission & Story (#about) */}
+      <section id="about" className="py-16 sm:py-24 border-b border-[var(--border)] bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
           
-          {/* Metrics Bar with Plus Jakarta Sans tabular-nums */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            
+            <div className="lg:col-span-6 space-y-6">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">
+                About Sovra
+              </span>
+              <h2 className="font-sans font-bold text-3xl sm:text-5xl text-[var(--ink)] tracking-[-0.03em]">
+                Academic knowledge should be organized, accessible, and effortless.
+              </h2>
+              <p className="text-sm sm:text-base text-[var(--ink-muted)] leading-relaxed">
+                Too often, university coursework is scattered across chaotic WhatsApp groups, lost email attachments, and paper bulletin boards. Lecturers spend hours re-sending the same syllabus, while students struggle to find verified past exams or lecture slides.
+              </p>
+              <p className="text-sm sm:text-base text-[var(--ink-muted)] leading-relaxed">
+                Sovra was created to solve this once and for all. We provide every university with a private, structured digital home where accredited curricula, lecture notes, and student cohorts come together seamlessly.
+              </p>
+            </div>
+
+            <div className="lg:col-span-6">
+              <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-8 sm:p-10 space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[var(--accent)] text-white flex items-center justify-center font-bold text-lg">
+                    &#10038;
+                  </div>
+                  <div>
+                    <h3 className="font-sans font-bold text-lg text-[var(--ink)]">
+                      The Sovra Commitment
+                    </h3>
+                    <p className="text-xs text-[var(--ink-muted)]">
+                      Built with students, lecturers, and academic deans
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4 text-xs sm:text-sm text-[var(--ink-muted)] leading-relaxed">
+                  <div className="flex items-start gap-3">
+                    <span className="font-bold text-[var(--ink)]">01.</span>
+                    <span><strong>Verified Sources:</strong> Every document in the vault is signed off by university faculty, eliminating counterfeit or outdated study materials.</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="font-bold text-[var(--ink)]">02.</span>
+                    <span><strong>Strict Privacy:</strong> Student grades, attendance records, and faculty feedback remain completely private to your school community.</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="font-bold text-[var(--ink)]">03.</span>
+                    <span><strong>Always Accessible:</strong> Fast, clean interface designed to work smoothly on mobile data and low-bandwidth campus WiFi.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Academic Metrics with Plus Jakarta Sans tabular-nums */}
           <div className="grid grid-cols-2 lg:grid-cols-4 border-t border-b border-[var(--border)] py-10 gap-8">
             <div>
-              <div className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--ink)] tabular-nums mb-1">
+              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--ink)] tabular-nums mb-1">
                 100%
               </div>
               <div className="text-xs text-[var(--ink-muted)]">
-                Cryptographic Tenant Boundary Isolation
+                Private Campus Spaces
               </div>
             </div>
 
             <div>
-              <div className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--ink)] tabular-nums mb-1">
-                &lt; 50ms
+              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--ink)] tabular-nums mb-1">
+                &lt; 1 min
               </div>
               <div className="text-xs text-[var(--ink-muted)]">
-                Institutional Sync & Retrieval Latency
+                Course Material Updates
               </div>
             </div>
 
             <div>
-              <div className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--ink)] tabular-nums mb-1">
+              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--ink)] tabular-nums mb-1">
                 0
               </div>
               <div className="text-xs text-[var(--ink-muted)]">
-                Cross-Tenant Information Leakage
+                Unverified Study Notes
               </div>
             </div>
 
             <div>
-              <div className="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--ink)] tabular-nums mb-1">
-                256-bit
+              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--ink)] tabular-nums mb-1">
+                24/7
               </div>
               <div className="text-xs text-[var(--ink-muted)]">
-                AES Document Encryption at Rest
+                Campus Library Access
               </div>
             </div>
           </div>
 
-          {/* Final Editorial Invitation */}
+        </div>
+      </section>
+
+      {/* 7. Final Invitation: Clean Call to Action */}
+      <section className="py-20 sm:py-28 bg-[var(--surface)] border-b border-[var(--border)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-6">
-            <h3 className="font-display text-4xl sm:text-6xl text-[var(--ink)] tracking-tight">
-              Ready to deploy your university&apos;s academic workspace?
+            <h3 className="font-sans font-bold text-3xl sm:text-5xl lg:text-6xl text-[var(--ink)] tracking-[-0.03em]">
+              Ready to open your university&apos;s private campus hub?
             </h3>
             <p className="text-sm sm:text-base text-[var(--ink-muted)] leading-relaxed">
-              Connect your faculty, students, and academic departments into a single modern workspace with zero setup friction.
+              Connect your students, faculty, and academic departments into a verified campus space today.
             </p>
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
@@ -778,36 +874,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
                 onClick={() => setShowWorkspaceRequestModal(true)}
                 className="rounded-full bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] px-8 py-3.5 text-sm font-semibold tracking-tight transition-all shadow-md cursor-pointer"
               >
-                Request Institution Workspace
+                Join Your University
               </button>
               <button
                 type="button"
                 onClick={() => { if (onEnterWorkspace) onEnterWorkspace(); else openAuth("login"); }}
                 className="rounded-full border border-[var(--border)] bg-[var(--bg)] text-[var(--ink)] hover:border-[var(--ink)] px-7 py-3.5 text-sm font-semibold transition-colors cursor-pointer"
               >
-                Sign In to Existing School Portal
+                Sign In to Existing Portal
               </button>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* 9. Footer: Minimalist Editorial Layout */}
-      <footer className="border-t border-[var(--border)] py-12 bg-[var(--bg)] text-xs text-[var(--ink-muted)]">
+      {/* 8. Footer: Minimalist Academic Layout */}
+      <footer className="py-12 bg-[var(--bg)] text-xs text-[var(--ink-muted)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <span className="font-display text-xl font-bold text-[var(--ink)]">SOVRA</span>
+            <span className="font-sans font-bold text-lg text-[var(--ink)]">SOVRA</span>
             <span>&bull;</span>
-            <span>Automated Academic Documentation Network</span>
+            <span>Academic Resource Network</span>
           </div>
 
           <div className="flex items-center gap-6">
-            <a href="#workspaces" className="hover:text-[var(--ink)] transition-colors">Workspaces</a>
-            <a href="#directions" className="hover:text-[var(--ink)] transition-colors">Directions</a>
-            <a href="#collaboration" className="hover:text-[var(--ink)] transition-colors">Collaboration</a>
-            <a href="#pipeline" className="hover:text-[var(--ink)] transition-colors">Pipeline</a>
-            <a href="#architecture" className="hover:text-[var(--ink)] transition-colors">Architecture</a>
+            <a href="#product" className="hover:text-[var(--ink)] transition-colors">Product</a>
+            <a href="#features" className="hover:text-[var(--ink)] transition-colors">Features</a>
+            <a href="#future" className="hover:text-[var(--ink)] transition-colors">Future Products</a>
+            <a href="#about" className="hover:text-[var(--ink)] transition-colors">About</a>
           </div>
 
           <div>
@@ -816,12 +910,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
         </div>
       </footer>
 
-      {/* Search Modal */}
+      {/* Modal: Search Campus Directory */}
       {showSearchModal && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 bg-black/60 backdrop-blur-sm p-4">
           <div className="w-full max-w-lg rounded-3xl border border-[var(--border)] bg-[var(--bg)] p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
-              <span className="font-display text-xl text-[var(--ink)]">Search Academic Portals</span>
+              <span className="font-sans font-bold text-lg text-[var(--ink)]">Search Campus Directory</span>
               <button
                 type="button"
                 onClick={() => setShowSearchModal(false)}
@@ -840,7 +934,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
               className="w-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] px-4 py-3 outline-none focus:border-[var(--accent)] text-xs"
             />
             <div className="text-xs text-[var(--ink-muted)] space-y-2 pt-2">
-              <span className="font-semibold text-[var(--ink)] block">Featured Institutional Portals:</span>
+              <span className="font-semibold text-[var(--ink)] block">Partner Universities:</span>
               <button
                 type="button"
                 onClick={() => { setShowSearchModal(false); if (onEnterWorkspace) onEnterWorkspace("tenant-ines"); else openAuth("login"); }}
@@ -862,16 +956,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
         </div>
       )}
 
-      {/* Modal: Request Institution Workspace */}
+      {/* Modal: Join Your University / Request Campus Space */}
       {showWorkspaceRequestModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[var(--bg)] p-6 sm:p-8 space-y-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
-              <span className="font-display text-2xl text-[var(--ink)]">Request Institution Workspace</span>
+              <span className="font-sans font-bold text-xl text-[var(--ink)]">Join Your University</span>
               <button
                 type="button"
                 onClick={() => setShowWorkspaceRequestModal(false)}
-                aria-label="Close workspace request dialog"
+                aria-label="Close dialog"
                 className="text-[var(--ink-muted)] hover:text-[var(--ink)] text-sm cursor-pointer p-1"
               >
                 &times;
@@ -880,16 +974,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
 
             {requestSubmitted ? (
               <div className="p-4 rounded-2xl border border-[var(--accent)] bg-[var(--surface)] text-xs text-[var(--ink)] space-y-2">
-                <span className="block font-semibold">Workspace Provisioning Request Received</span>
+                <span className="block font-semibold">Request Received</span>
                 <p className="text-[var(--ink-muted)]">
-                  An institutional setup link has been routed to your academic administration email. Our governance onboarding team will confirm your domain within 24 hours.
+                  An invitation link will be sent to your institutional email once verified. We will connect you to your school&apos;s campus space shortly.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleRequestSubmit} className="space-y-4 text-xs">
                 <div>
                   <label htmlFor="institution-name" className="block text-[var(--ink-muted)] font-medium mb-1">
-                    Institution / University Name
+                    University / College Name
                   </label>
                   <input
                     id="institution-name"
@@ -904,13 +998,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
 
                 <div>
                   <label htmlFor="institution-email" className="block text-[var(--ink-muted)] font-medium mb-1">
-                    Official Administrative Email (.edu, .ac)
+                    University Email Address (.ac, .edu)
                   </label>
                   <input
                     id="institution-email"
                     type="email"
                     required
-                    placeholder="e.g. academic.registrar@ines.ac.rw"
+                    placeholder="e.g. yourname@university.ac.rw"
                     value={institutionEmail}
                     onChange={(e) => setInstitutionEmail(e.target.value)}
                     className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] px-3 py-2.5 outline-none focus:border-[var(--accent)]"
@@ -919,7 +1013,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
 
                 <div>
                   <label htmlFor="institution-role" className="block text-[var(--ink-muted)] font-medium mb-1">
-                    Institutional Role
+                    Your Academic Role
                   </label>
                   <select
                     id="institution-role"
@@ -927,11 +1021,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
                     onChange={(e) => setInstitutionRole(e.target.value)}
                     className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] px-3 py-2.5 outline-none focus:border-[var(--accent)]"
                   >
-                    <option value="Dean of Academic Affairs">Dean of Academic Affairs</option>
+                    <option value="Student">Student (Undergraduate / Postgraduate)</option>
+                    <option value="Faculty Lecturer">Faculty Lecturer / Professor</option>
                     <option value="Department Head / Chair">Department Head / Chair</option>
-                    <option value="Academic Registrar">Academic Registrar</option>
-                    <option value="Curriculum & Accreditation Officer">Curriculum & Accreditation Officer</option>
-                    <option value="Faculty Lecturer">Faculty Lecturer</option>
+                    <option value="Academic Dean">Dean of Faculty / School</option>
+                    <option value="Academic Registrar">Academic Registrar / Administration</option>
                   </select>
                 </div>
 
@@ -947,7 +1041,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
                     type="submit"
                     className="rounded-full bg-[var(--accent)] text-white px-5 py-2.5 font-semibold cursor-pointer"
                   >
-                    Submit Request
+                    Submit
                   </button>
                 </div>
               </form>

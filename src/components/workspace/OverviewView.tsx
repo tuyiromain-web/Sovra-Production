@@ -17,16 +17,16 @@ export const OverviewView: React.FC = () => {
         <div>
           <div className="flex items-center gap-2 text-xs text-[var(--ink-muted)] mb-1">
             <span className="font-semibold text-[var(--accent)] uppercase tracking-wider">
-              Isolated Institution Partition
+              Dedicated Campus Space
             </span>
             <span>&bull;</span>
-            <span className="font-sans text-[11px] tabular-nums">{activeTenant.isolatedPartitionKey}</span>
+            <span className="font-sans text-[11px] tabular-nums">{activeTenant.domain}</span>
           </div>
-          <h1 className="font-display text-3xl sm:text-5xl font-semibold text-[var(--ink)] tracking-tight">
+          <h1 className="font-sans text-3xl sm:text-5xl font-semibold text-[var(--ink)] tracking-tight">
             {activeTenant.name}
           </h1>
           <p className="text-xs sm:text-sm text-[var(--ink-muted)] mt-1.5 max-w-2xl leading-relaxed">
-            Institutional academic workspace operating under cryptographic perimeter isolation. Syllabi, accreditation files, and student cohort directories are strictly isolated to this workspace.
+            Institutional academic workspace operating under a private university perimeter. Syllabi, course files, and student cohort directories are strictly reserved for enrolled faculty and students.
           </p>
         </div>
 
@@ -105,7 +105,7 @@ export const OverviewView: React.FC = () => {
         {/* Left Column: Tenant Governance Details */}
         <div className="lg:col-span-5 space-y-6">
           <div className="border border-[var(--border)] bg-[var(--bg)] p-6 space-y-4">
-            <h2 className="font-display text-xl font-semibold text-[var(--ink)] tracking-tight border-b border-[var(--border)] pb-3">
+            <h2 className="font-sans text-xl font-semibold text-[var(--ink)] tracking-tight border-b border-[var(--border)] pb-3">
               Institutional Governance Profile
             </h2>
 
@@ -126,25 +126,25 @@ export const OverviewView: React.FC = () => {
               </div>
 
               <div>
-                <span className="text-[var(--ink-muted)] block">Storage Encryption Mode</span>
-                <span className="font-semibold text-[var(--ink)]">AES-256 GCM Client-Side Envelope</span>
+                <span className="text-[var(--ink-muted)] block">Data Protection</span>
+                <span className="font-semibold text-[var(--ink)]">University-Grade Encrypted Storage</span>
               </div>
 
               <div>
-                <span className="text-[var(--ink-muted)] block">Hardware Partition ID</span>
+                <span className="text-[var(--ink-muted)] block">Official Campus Domain</span>
                 <span className="font-sans tabular-nums text-[10px] text-[var(--ink)] block p-2 bg-[var(--surface)] border border-[var(--border)] mt-1">
-                  {activeTenant.isolatedPartitionKey}
+                  {activeTenant.domain}
                 </span>
               </div>
             </div>
           </div>
 
           <div className="border border-[var(--border)] bg-[var(--surface)] p-6 space-y-3">
-            <h3 className="font-display text-lg text-[var(--ink)] tracking-tight">
-              Cryptographic Tenant Perimeter
+            <h3 className="font-sans text-lg text-[var(--ink)] tracking-tight">
+              Dedicated Campus Privacy Boundary
             </h3>
             <p className="text-xs text-[var(--ink-muted)] leading-relaxed">
-              Sovra executes PostgreSQL Row-Level Security (RLS) policies targeting <code>auth.jwt() -&gt; &apos;tenant_id&apos;</code>. Zero cross-institutional queries are physically possible at the database engine level.
+              Sovra enforces dedicated privacy boundaries for every institution. Course records, student grades, and faculty syllabi are strictly isolated and never shared across universities.
             </p>
           </div>
         </div>
@@ -152,7 +152,7 @@ export const OverviewView: React.FC = () => {
         {/* Right Column: Recent Documentation Ledger Activity */}
         <div className="lg:col-span-7 space-y-4">
           <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
-            <h2 className="font-display text-xl font-semibold text-[var(--ink)] tracking-tight">
+            <h2 className="font-sans text-xl font-semibold text-[var(--ink)] tracking-tight">
               Recent Documentation Ledger Activity
             </h2>
             <button
@@ -188,7 +188,7 @@ export const OverviewView: React.FC = () => {
                     <span>&bull;</span>
                     <span className="tabular-nums">{doc.version}</span>
                   </div>
-                  <div className="font-display text-base font-semibold text-[var(--ink)] truncate">
+                  <div className="font-sans text-base font-semibold text-[var(--ink)] truncate">
                     {doc.title}
                   </div>
                   <div className="text-xs text-[var(--ink-muted)] truncate">

@@ -32,7 +32,7 @@ export const WorkspaceSidebar: React.FC = () => {
       {/* Top Header & Brand Wordmark */}
       <div className="p-5 sm:p-6 space-y-6">
         
-        {/* Brand Typographic Wordmark (Pure Instrument Serif, No SVG Logo Icon) */}
+        {/* Brand Typographic Wordmark (Plus Jakarta Sans Only) */}
         <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
           <button
             type="button"
@@ -40,11 +40,11 @@ export const WorkspaceSidebar: React.FC = () => {
             aria-label="Return to platform landing"
             className="text-left group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
           >
-            <span className="font-display text-2xl tracking-tight text-[var(--ink)] group-hover:text-[var(--accent)] transition-colors">
+            <span className="font-sans font-bold text-2xl tracking-[-0.03em] text-[var(--ink)] group-hover:text-[var(--accent)] transition-colors">
               SOVRA
             </span>
             <span className="block text-[10px] font-sans text-[var(--ink-muted)] tracking-wider uppercase">
-              Institutional Network
+              Academic Network
             </span>
           </button>
           
@@ -89,11 +89,11 @@ export const WorkspaceSidebar: React.FC = () => {
       <div className="p-5 sm:p-6 border-t border-[var(--border)] bg-[var(--surface)] space-y-3">
         <div className="text-[11px] text-[var(--ink-muted)] space-y-1">
           <div className="flex items-center justify-between">
-            <span className="font-medium text-[var(--ink)]">Security Perimeter</span>
-            <span className="tabular-nums font-semibold text-[var(--ink)]">RLS Hardware Gated</span>
+            <span className="font-medium text-[var(--ink)]">Network Security</span>
+            <span className="tabular-nums font-semibold text-[var(--ink)]">Private Campus Space</span>
           </div>
           <div className="truncate text-[10px]">
-            Partition: {activeTenant.isolatedPartitionKey}
+            Accreditation: {activeTenant.accreditationBody}
           </div>
         </div>
 

@@ -41,11 +41,11 @@ export const FacultyDocsLedger: React.FC = () => {
           <span className="text-[10px] font-semibold tracking-wider uppercase text-[var(--accent)] block mb-1">
             Institutional Vault Ledger &bull; {activeTenant.code}
           </span>
-          <h1 className="font-display text-3xl sm:text-4xl font-semibold text-[var(--ink)] tracking-tight">
+          <h1 className="font-sans text-3xl sm:text-4xl font-semibold text-[var(--ink)] tracking-tight">
             Faculty Documentation & Syllabi
           </h1>
           <p className="text-xs text-[var(--ink-muted)] mt-1 max-w-2xl">
-            Central repository of accredited course syllabi, curriculum frameworks, and faculty compendiums. Cryptographically indexed and isolated to {activeTenant.name}.
+            Central repository of accredited course syllabi, curriculum frameworks, and faculty compendiums. Officially verified and private to {activeTenant.name}.
           </p>
         </div>
 
@@ -199,11 +199,11 @@ export const FacultyDocsLedger: React.FC = () => {
       {/* Ledger Pagination / Ledger Record Summary */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--ink-muted)] pt-2 border-t border-[var(--border)]">
         <div>
-          Showing <span className="font-semibold text-[var(--ink)] tabular-nums">{filteredDocuments.length}</span> verified documents in partition <span className="font-sans tabular-nums text-[11px] text-[var(--ink)]">{activeTenant.isolatedPartitionKey}</span>
+          Showing <span className="font-semibold text-[var(--ink)] tabular-nums">{filteredDocuments.length}</span> verified documents in <span className="font-sans font-semibold text-[var(--ink)]">{activeTenant.name}</span> syllabus directory.
         </div>
         <div className="flex items-center gap-4">
-          <span>Accreditation Hash Verification: <strong className="text-[var(--ink)]">Enforced</strong></span>
-          <span>AES-256 Storage: <strong className="text-[var(--ink)]">Active</strong></span>
+          <span>Accreditation Status: <strong className="text-[var(--ink)]">Verified</strong></span>
+          <span>Campus Storage: <strong className="text-[var(--ink)]">Secure</strong></span>
         </div>
       </div>
 

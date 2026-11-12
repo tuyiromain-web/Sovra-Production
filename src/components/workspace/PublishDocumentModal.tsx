@@ -96,9 +96,9 @@ export const PublishDocumentModal: React.FC = () => {
         <div className="flex items-start justify-between border-b border-[var(--border)] pb-4 mb-6">
           <div>
             <span className="text-[10px] font-semibold tracking-wider uppercase text-[var(--ink-muted)]">
-              {activeTenant.name} &bull; Isolated Vault Ingestion
+              {activeTenant.name} &bull; Official Syllabus Repository
             </span>
-            <h2 id="publish-modal-title" className="font-display text-2xl sm:text-3xl font-semibold text-[var(--ink)] tracking-tight">
+            <h2 id="publish-modal-title" className="font-sans text-2xl sm:text-3xl font-semibold text-[var(--ink)] tracking-tight">
               Publish Faculty Documentation
             </h2>
           </div>

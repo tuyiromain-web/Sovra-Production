@@ -2,10 +2,11 @@
 
 ## 1. Foundational Design Rules
 
-### Typography
-- **Display Headlines**: Always use `--font-display` (`Instrument Serif`) with tight `-0.03em` tracking.
-- **UI & Body**: Always use `--font-sans` (`Plus Jakarta Sans`).
-- **Metrics, Badges & Timers**: Always use `--font-mono` (`JetBrains Mono`) with tabular numbers (`tabular-nums`).
+### Typography (Single Typeface Rule: Plus Jakarta Sans Only)
+- **Sole Font Family**: Strictly use `--font-sans` (`Plus Jakarta Sans`, weights 400, 500, 600, 700) for all text, headings, buttons, inputs, SVG diagrams, and brand wordmark. Instrument Serif and monospace fonts are prohibited.
+- **Headlines & Brand Wordmark**: Use `font-sans font-bold tracking-[-0.03em]`.
+- **UI & Body**: Use `font-sans font-normal text-sm sm:text-base`.
+- **Metrics, Badges & Timers**: Use `font-sans font-semibold tabular-nums` (zero monospace).
 
 ### Dual Surface & 95% Pure Color Discipline
 - **Pure White Mode**:

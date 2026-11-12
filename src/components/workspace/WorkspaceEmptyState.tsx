@@ -20,7 +20,7 @@ export const WorkspaceEmptyState: React.FC<WorkspaceEmptyStateProps> = ({
 }) => {
   return (
     <div className="border border-[var(--border)] bg-[var(--surface)] p-12 text-center space-y-4">
-      <div className="font-display text-2xl text-[var(--ink)] tracking-tight">
+      <div className="font-sans text-2xl text-[var(--ink)] tracking-tight">
         {title}
       </div>
       <p className="text-xs sm:text-sm text-[var(--ink-muted)] max-w-md mx-auto leading-relaxed">

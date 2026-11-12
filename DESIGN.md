@@ -5,20 +5,19 @@ Sovra's design language couples the clarity and timeless elegance of high-end ed
 
 ---
 
-## 2. Typography Scale & Font Families
+## 2. Typography: Single Typeface Rule (Plus Jakarta Sans Only)
 
-The typography system strictly uses two core typefaces loaded via Google Fonts:
+Sovra strictly standardizes on **Plus Jakarta Sans** (weights 400, 500, 600, 700) as the sole typeface across the entire application (`--font-sans`), loaded via Google Fonts. All secondary fonts and serifs are completely eliminated.
 
-| Family | Role | CSS Variable | Tracking & Features |
+| Family | Role | CSS Variable | Tracking & Weights |
 | :--- | :--- | :--- | :--- |
-| **Instrument Serif** | Display Headlines, Section Titles & Brand Wordmark | `--font-display` | Tight tracking (`-0.03em`), ligatures enabled (`"liga" 1, "dlig" 1`) |
-| **Plus Jakarta Sans** | UI Controls, Prose, Navigation, Metrics & Labels | `--font-sans` | Geometric clarity, optical balance; tabular numbers enabled (`.tabular-nums`) |
+| **Plus Jakarta Sans** | Global Typography (Headings, Body, Controls, Metrics & Wordmark) | `--font-sans` | 400 (Regular), 500 (Medium), 600 (Semibold), 700 (Bold) |
 
-### Font Hierarchy
-- **Brand Wordmark & Display Headlines (H1 - H2)**: `font-display tracking-[-0.03em] font-normal`
-- **Section Headers (H3 - H4)**: `font-display tracking-tight font-normal` or `font-sans font-bold`
-- **Body & Prose**: `font-sans text-sm sm:text-base leading-relaxed`
-- **Numerical Metrics & Timestamps**: `font-sans tabular-nums font-semibold`
+### Hierarchy Through Weight & Tracking
+- **Brand Wordmark & Display Headlines (H1 - H2)**: `font-sans font-bold tracking-[-0.03em]`
+- **Section Headers (H3 - H4)**: `font-sans font-semibold tracking-tight`
+- **Body & Prose**: `font-sans text-sm sm:text-base leading-relaxed font-normal`
+- **Numerical Metrics & Timestamps**: `font-sans tabular-nums font-semibold` (zero monospace fonts)
 
 ---
 
