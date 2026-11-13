@@ -3,26 +3,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ThemeToggle } from "../components/ui/ThemeToggle";
 import TenantIsolationDiagram from "../components/diagrams/TenantIsolationDiagram";
 import AcademicDocPipelineDiagram from "../components/diagrams/AcademicDocPipelineDiagram";
-import AuthPage from "../components/AuthPage";
-import { UserProfile } from "../types";
 
 export interface LandingPageProps {
-  onAuthSuccess: (user: UserProfile) => void;
-  onEnterWorkspace?: (tenantId?: string) => void;
+  onNavigateToLogin: () => void;
+  onNavigateToSignUp: () => void;
+  onEnterWorkspace?: (schoolId?: string) => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnterWorkspace }) => {
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authMode, setAuthMode] = useState<"login" | "signup">("login");
-  const [showWorkspaceRequestModal, setShowWorkspaceRequestModal] = useState(false);
-  const [institutionName, setInstitutionName] = useState("");
-  const [institutionEmail, setInstitutionEmail] = useState("");
-  const [institutionRole, setInstitutionRole] = useState("Faculty Lecturer");
-  const [requestSubmitted, setRequestSubmitted] = useState(false);
+export const LandingPage: React.FC<LandingPageProps> = ({
+  onNavigateToLogin,
+  onNavigateToSignUp,
+  onEnterWorkspace,
+}) => {
   const [selectedDirectionTab, setSelectedDirectionTab] = useState<number>(0);
   const [canvasActiveTool, setCanvasActiveTool] = useState<"pen" | "highlight" | "stamp" | "eraser">("pen");
   const [canvasNotes, setCanvasNotes] = useState<Array<{ id: number; text: string; x: number; y: number; author: string; color: string }>>([
@@ -31,22 +27,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
   ]);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileNavOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileNavOpen]);
 
   const openAuth = (mode: "login" | "signup") => {
-    setAuthMode(mode);
-    setShowAuthModal(true);
-  };
-
-  const handleRequestSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!institutionName.trim() || !institutionEmail.trim()) return;
-    setRequestSubmitted(true);
-    setTimeout(() => {
-      setShowWorkspaceRequestModal(false);
-      setRequestSubmitted(false);
-      setInstitutionName("");
-      setInstitutionEmail("");
-    }, 2000);
+    if (mode === "signup") {
+      onNavigateToSignUp();
+    } else {
+      onNavigateToLogin();
+    }
   };
 
   const addCanvasNote = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -136,13 +133,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
             </a>
           </nav>
 
-          {/* Right Action Controls: Search, Theme Toggle, Sign In & Primary Academic CTA */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* Right Action Controls: Search, Theme Toggle, Sign In, Primary CTA & Mobile Menu */}
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               type="button"
               onClick={() => setShowSearchModal(true)}
               aria-label="Search campus directory"
-              className="w-9 h-9 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors cursor-pointer"
+              className="w-11 h-11 sm:w-9 sm:h-9 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--ink-muted)] hover:text-[var(--ink)] transition-colors cursor-pointer"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -154,21 +151,96 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
             <button
               type="button"
               onClick={() => openAuth("login")}
-              className="hidden sm:inline-flex text-xs font-semibold text-[var(--ink)] hover:text-[var(--accent)] px-3 py-2 transition-colors cursor-pointer"
+              className="hidden sm:inline-flex min-h-[44px] items-center text-xs font-semibold text-[var(--ink)] hover:text-[var(--accent)] px-3 py-2 transition-colors cursor-pointer"
             >
               Sign In
             </button>
 
             <button
               type="button"
-              onClick={() => setShowWorkspaceRequestModal(true)}
-              className="rounded-full bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] px-5 py-2.5 text-xs font-semibold tracking-tight transition-all shadow-xs cursor-pointer whitespace-nowrap"
+              onClick={onNavigateToSignUp}
+              className="hidden sm:inline-flex min-h-[44px] items-center rounded-full bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] px-5 py-2.5 text-xs font-semibold tracking-tight transition-all shadow-xs cursor-pointer whitespace-nowrap"
             >
               Join Your University
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setMobileNavOpen((prev) => !prev)}
+              aria-label={mobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={mobileNavOpen}
+              className="lg:hidden w-11 h-11 flex items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] hover:border-[var(--ink)] transition-colors cursor-pointer"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+                {mobileNavOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+                )}
+              </svg>
             </button>
           </div>
 
         </div>
+
+        {/* Mobile & Tablet Navigation Drawer */}
+        {mobileNavOpen && (
+          <div className="lg:hidden border-t border-[var(--border)] bg-[var(--bg)] px-4 sm:px-6 py-4 space-y-4">
+            <nav aria-label="Mobile navigation" className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <a
+                href="#product"
+                onClick={() => setMobileNavOpen(false)}
+                className="min-h-[44px] flex items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-medium text-[var(--ink)] hover:border-[var(--accent)] transition-colors"
+              >
+                Product
+              </a>
+              <a
+                href="#features"
+                onClick={() => setMobileNavOpen(false)}
+                className="min-h-[44px] flex items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-medium text-[var(--ink)] hover:border-[var(--accent)] transition-colors"
+              >
+                Features
+              </a>
+              <a
+                href="#future"
+                onClick={() => setMobileNavOpen(false)}
+                className="min-h-[44px] flex items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-medium text-[var(--ink)] hover:border-[var(--accent)] transition-colors"
+              >
+                Future Products
+              </a>
+              <a
+                href="#about"
+                onClick={() => setMobileNavOpen(false)}
+                className="min-h-[44px] flex items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-medium text-[var(--ink)] hover:border-[var(--accent)] transition-colors"
+              >
+                About
+              </a>
+            </nav>
+
+            <div className="sm:hidden flex flex-col gap-2 pt-2 border-t border-[var(--border)]">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileNavOpen(false);
+                  openAuth("login");
+                }}
+                className="min-h-[44px] w-full rounded-full border border-[var(--border)] bg-[var(--surface)] text-xs font-semibold text-[var(--ink)] px-4 py-2.5 cursor-pointer"
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileNavOpen(false);
+                  onNavigateToSignUp();
+                }}
+                className="min-h-[44px] w-full rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] text-xs font-semibold px-4 py-2.5 cursor-pointer"
+              >
+                Join Your University
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* 2. Hero Section: Human Academic Language */}
@@ -199,18 +271,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
               </p>
 
               {/* Action CTAs */}
-              <div className="flex flex-wrap items-center gap-3.5 pt-2">
+              <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3.5 pt-2">
                 <button
                   type="button"
-                  onClick={() => setShowWorkspaceRequestModal(true)}
-                  className="rounded-full bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] px-7 py-3.5 text-sm font-semibold tracking-tight transition-all shadow-md cursor-pointer"
+                  onClick={onNavigateToSignUp}
+                  className="w-full sm:w-auto min-h-[44px] rounded-full bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] px-7 py-3.5 text-sm font-semibold tracking-tight transition-all shadow-md cursor-pointer"
                 >
                   Join Your University
                 </button>
                 <button
                   type="button"
                   onClick={() => { if (onEnterWorkspace) onEnterWorkspace(); else openAuth("login"); }}
-                  className="rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] hover:border-[var(--ink)] px-6 py-3.5 text-sm font-semibold transition-colors cursor-pointer"
+                  className="w-full sm:w-auto min-h-[44px] rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] hover:border-[var(--ink)] px-6 py-3.5 text-sm font-semibold transition-colors cursor-pointer"
                 >
                   Open Campus Portal
                 </button>
@@ -257,7 +329,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                   
                   {/* Floating Inset Course Pill */}
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs text-white">
+                  <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 flex flex-wrap items-center justify-between gap-2 text-xs text-white">
                     <span className="bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-full font-medium">
                       INES Applied Sciences &bull; Cohort 2026
                     </span>
@@ -871,7 +943,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
                 type="button"
-                onClick={() => setShowWorkspaceRequestModal(true)}
+                onClick={onNavigateToSignUp}
                 className="rounded-full bg-[var(--accent)] hover:opacity-90 text-[var(--accent-contrast)] px-8 py-3.5 text-sm font-semibold tracking-tight transition-all shadow-md cursor-pointer"
               >
                 Join Your University
@@ -952,123 +1024,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onAuthSuccess, onEnter
                 <span className="text-[var(--accent)] font-semibold">Enter &rarr;</span>
               </button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Modal: Join Your University / Request Campus Space */}
-      {showWorkspaceRequestModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-3xl border border-[var(--border)] bg-[var(--bg)] p-6 sm:p-8 space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[var(--border)] pb-3">
-              <span className="font-sans font-bold text-xl text-[var(--ink)]">Join Your University</span>
-              <button
-                type="button"
-                onClick={() => setShowWorkspaceRequestModal(false)}
-                aria-label="Close dialog"
-                className="text-[var(--ink-muted)] hover:text-[var(--ink)] text-sm cursor-pointer p-1"
-              >
-                &times;
-              </button>
-            </div>
-
-            {requestSubmitted ? (
-              <div className="p-4 rounded-2xl border border-[var(--accent)] bg-[var(--surface)] text-xs text-[var(--ink)] space-y-2">
-                <span className="block font-semibold">Request Received</span>
-                <p className="text-[var(--ink-muted)]">
-                  An invitation link will be sent to your institutional email once verified. We will connect you to your school&apos;s campus space shortly.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleRequestSubmit} className="space-y-4 text-xs">
-                <div>
-                  <label htmlFor="institution-name" className="block text-[var(--ink-muted)] font-medium mb-1">
-                    University / College Name
-                  </label>
-                  <input
-                    id="institution-name"
-                    type="text"
-                    required
-                    placeholder="e.g. INES-Ruhengeri Applied Sciences"
-                    value={institutionName}
-                    onChange={(e) => setInstitutionName(e.target.value)}
-                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] px-3 py-2.5 outline-none focus:border-[var(--accent)]"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="institution-email" className="block text-[var(--ink-muted)] font-medium mb-1">
-                    University Email Address (.ac, .edu)
-                  </label>
-                  <input
-                    id="institution-email"
-                    type="email"
-                    required
-                    placeholder="e.g. yourname@university.ac.rw"
-                    value={institutionEmail}
-                    onChange={(e) => setInstitutionEmail(e.target.value)}
-                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] px-3 py-2.5 outline-none focus:border-[var(--accent)]"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="institution-role" className="block text-[var(--ink-muted)] font-medium mb-1">
-                    Your Academic Role
-                  </label>
-                  <select
-                    id="institution-role"
-                    value={institutionRole}
-                    onChange={(e) => setInstitutionRole(e.target.value)}
-                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] px-3 py-2.5 outline-none focus:border-[var(--accent)]"
-                  >
-                    <option value="Student">Student (Undergraduate / Postgraduate)</option>
-                    <option value="Faculty Lecturer">Faculty Lecturer / Professor</option>
-                    <option value="Department Head / Chair">Department Head / Chair</option>
-                    <option value="Academic Dean">Dean of Faculty / School</option>
-                    <option value="Academic Registrar">Academic Registrar / Administration</option>
-                  </select>
-                </div>
-
-                <div className="pt-2 flex items-center justify-end gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setShowWorkspaceRequestModal(false)}
-                    className="px-4 py-2 text-[var(--ink-muted)] hover:text-[var(--ink)] cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="rounded-full bg-[var(--accent)] text-white px-5 py-2.5 font-semibold cursor-pointer"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Modal: Authentication Gateway (Login / Register) */}
-      {showAuthModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="relative w-full max-w-md my-8">
-            <button
-              type="button"
-              onClick={() => setShowAuthModal(false)}
-              aria-label="Close authentication gateway"
-              className="absolute -top-10 right-0 text-white hover:text-gray-300 text-sm font-semibold cursor-pointer z-10 p-1"
-            >
-              Close &times;
-            </button>
-            <AuthPage
-              initialMode={authMode}
-              onAuthSuccess={(user) => {
-                setShowAuthModal(false);
-                onAuthSuccess(user);
-              }}
-            />
           </div>
         </div>
       )}

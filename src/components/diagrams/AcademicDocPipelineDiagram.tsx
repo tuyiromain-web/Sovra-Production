@@ -110,10 +110,10 @@ export const AcademicDocPipelineDiagram: React.FC = () => {
   return (
     <div className="w-full border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] font-sans">
       {/* Top Status Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[var(--border)] px-4 sm:px-6 py-3 text-xs">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[var(--border)] px-4 sm:px-6 py-3 text-xs gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <span className="font-semibold tracking-tight text-[var(--ink)]">Course Material Lifecycle</span>
-          <span className="text-[var(--ink-muted)]">|</span>
+          <span className="text-[var(--ink-muted)] hidden sm:inline">|</span>
           <span className="text-[var(--ink-muted)]">From Instructor Desk to Student Hands</span>
         </div>
         <div className="text-[var(--ink-muted)] tabular-nums mt-1 sm:mt-0">
@@ -130,7 +130,7 @@ export const AcademicDocPipelineDiagram: React.FC = () => {
               key={stage.id}
               type="button"
               onClick={() => setSelectedStageIndex(idx)}
-              className={`p-4 text-left border-b lg:border-b-0 border-r border-[var(--border)] last:border-r-0 transition-colors cursor-pointer ${
+              className={`min-h-[44px] p-4 text-left border-b lg:border-b-0 border-r border-[var(--border)] last:border-r-0 transition-colors cursor-pointer ${
                 isSelected
                   ? "bg-[var(--surface)] border-b-2 border-b-[var(--accent)] text-[var(--ink)]"
                   : "bg-[var(--bg)] text-[var(--ink-muted)] hover:text-[var(--ink)] hover:bg-[var(--surface)]"

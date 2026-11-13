@@ -6,20 +6,27 @@
 import React from "react";
 import { WorkspaceProvider } from "../components/workspace/WorkspaceContext";
 import { WorkspaceShell } from "../components/workspace/WorkspaceShell";
+import type { UserProfile } from "../types";
 
 export interface AppWorkspaceProps {
-  initialTenantId?: string;
+  initialSchoolId?: string | null;
+  currentUser?: UserProfile | null;
   onNavigateToLanding: () => void;
+  onSignOut?: () => void;
 }
 
 export const AppWorkspace: React.FC<AppWorkspaceProps> = ({
-  initialTenantId = "tenant-stjude",
-  onNavigateToLanding
+  initialSchoolId,
+  currentUser,
+  onNavigateToLanding,
+  onSignOut,
 }) => {
   return (
     <WorkspaceProvider
-      initialTenantId={initialTenantId}
+      initialSchoolId={initialSchoolId}
+      currentUser={currentUser}
       onNavigateToLanding={onNavigateToLanding}
+      onSignOut={onSignOut}
     >
       <WorkspaceShell />
     </WorkspaceProvider>

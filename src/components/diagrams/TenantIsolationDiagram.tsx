@@ -68,10 +68,10 @@ export const TenantIsolationDiagram: React.FC = () => {
   return (
     <div className="w-full border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] font-sans">
       {/* Top Protocol Status Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[var(--border)] px-4 sm:px-6 py-3 text-xs">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[var(--border)] px-4 sm:px-6 py-3 text-xs gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <span className="font-semibold tracking-tight text-[var(--ink)]">Dedicated Campus Spaces</span>
-          <span className="text-[var(--ink-muted)]">|</span>
+          <span className="text-[var(--ink-muted)] hidden sm:inline">|</span>
           <span className="text-[var(--ink-muted)]">Private &amp; Secure to Each University</span>
         </div>
         <div className="text-[var(--ink-muted)] tabular-nums mt-1 sm:mt-0">

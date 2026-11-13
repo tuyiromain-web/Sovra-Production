@@ -3,86 +3,77 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import type { UserRole } from "../../types";
+
 export type WorkspaceTab = "overview" | "programs" | "documents" | "vault" | "students";
 
-export type DocCategory = 
-  | "Syllabus" 
-  | "Accreditation Record" 
-  | "Curriculum Framework" 
-  | "Lecture Packet";
+export type ResourceCategory =
+  | "Notes"
+  | "Past Paper"
+  | "Reference Book"
+  | "Lab Report"
+  | "Syllabus";
 
-export type ApprovalStatus = "Verified" | "Under Review" | "Archived";
+export type ResourceFileType = "pdf" | "pptx" | "docx" | "link";
 
-export interface InstitutionTenant {
+/** Maps 1:1 to public.schools */
+export interface SchoolWorkspace {
   id: string;
   name: string;
+  slug: string;
   code: string;
-  domain: string;
-  accreditationBody: string;
-  isolatedPartitionKey: string;
-  totalStudents: string;
-  activeFaculty: string;
-  facultyDocsCount: string;
-  coverageMetric: string;
-  term: string;
+  domain: string | null;
+  country: string | null;
+  created_at: string;
 }
 
-export interface FacultyDocument {
+/** Maps 1:1 to public.courses */
+export interface CourseProgram {
   id: string;
-  title: string;
+  school_id: string;
   code: string;
-  programId: string;
-  programName: string;
-  category: DocCategory;
-  version: string;
-  author: string;
-  authorRole: string;
-  status: ApprovalStatus;
-  updatedAt: string;
-  summary: string;
-  learningObjectives: string[];
-  creditHours: number;
-  prerequisites: string[];
-  accreditationAlignment: string;
-  fileSize: string;
-  hash: string;
-}
-
-export interface AcademicProgram {
-  id: string;
   name: string;
-  code: string;
-  department: string;
-  dean: string;
-  degreeType: string;
-  duration: string;
-  enrolledStudents: number;
-  totalModules: number;
-  documentationCoverage: number;
-  sharedResourcesCount: number;
-  accessTier: string;
+  academic_year: string;
+  description: string | null;
+  credits: number;
+  created_at: string;
+  resourceCount: number;
 }
 
-export interface VaultResource {
+/** Maps 1:1 to public.resources */
+export interface ResourceDocument {
   id: string;
+  school_id: string;
+  course_id: string | null;
   title: string;
-  moduleCode: string;
-  programName: string;
-  format: "PDF" | "DOCX" | "SLIDES" | "LAB";
-  lecturer: string;
-  downloadsCount: number;
-  fileSize: string;
-  hash: string;
-  publishedDate: string;
+  description: string;
+  category: ResourceCategory;
+  course_code: string;
+  course_name: string;
+  academic_year: string;
+  file_type: ResourceFileType;
+  file_size: string;
+  file_path: string | null;
+  download_url: string;
+  uploaded_by: string;
+  uploaded_by_id: string;
+  downloads_count: number;
+  target_lecturer: string | null;
+  target_module: string | null;
+  approved: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface StudentCohort {
+/** Maps 1:1 to public.profiles */
+export interface CampusMember {
   id: string;
-  cohortCode: string;
-  program: string;
-  year: string;
-  studentCount: number;
-  representative: string;
-  attendanceRate: string;
-  lastActive: string;
+  school_id: string | null;
+  name: string;
+  email: string;
+  student_id: string;
+  role: UserRole;
+  academic_year: string;
+  avatar_url: string | null;
+  created_at: string;
 }

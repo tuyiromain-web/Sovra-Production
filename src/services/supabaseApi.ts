@@ -8,6 +8,55 @@ import type {
   UserRole
 } from "../types";
 
+export interface SchoolRow {
+  id: string;
+  name: string;
+  slug: string;
+  code: string;
+  domain: string | null;
+  logo_url: string | null;
+  banner_url: string | null;
+  country: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CourseRow {
+  id: string;
+  school_id: string;
+  code: string;
+  name: string;
+  academic_year: string;
+  description: string | null;
+  credits: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ResourceRow {
+  id: string;
+  school_id: string;
+  course_id: string | null;
+  title: string;
+  description: string;
+  category: "Notes" | "Past Paper" | "Reference Book" | "Lab Report" | "Syllabus";
+  course_code: string;
+  course_name: string;
+  academic_year: string;
+  file_type: "pdf" | "pptx" | "docx" | "link";
+  file_size: string | null;
+  file_path: string | null;
+  download_url: string;
+  uploaded_by: string;
+  uploaded_by_id: string;
+  downloads_count: number;
+  target_lecturer: string | null;
+  target_module: string | null;
+  approved: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface ProfileRow {
   id: string;
   school_id: string | null;
@@ -15,9 +64,9 @@ export interface ProfileRow {
   email: string;
   student_id: string;
   role: UserRole;
-  academic_year: string;
+  academic_year: string | null;
   avatar_url: string | null;
-  avatar_theme: string;
+  avatar_theme: string | null;
   level: number;
   xp: number;
   created_at: string;
@@ -95,6 +144,182 @@ export async function updateUserProfile(userId: string, updates: Partial<Profile
     throw error;
   }
   return data as ProfileRow;
+}
+
+// ==============================================================================
+// 2B. SCHOOLS & INSTITUTION WORKSPACES
+// ==============================================================================
+export async function fetchSchools(): Promise<SchoolRow[]> {
+  const { data, error } = await (supabase.from("schools") as any)
+    .select("*")
+    .order("name", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching schools:", error);
+    return [];
+  }
+  return (data || []) as SchoolRow[];
+}
+
+export async function createSchool(payload: {
+  name: string;
+  code: string;
+  domain?: string;
+  country?: string;
+}): Promise<SchoolRow> {
+  const cleanName = payload.name.trim();
+  const cleanCode = payload.code.trim().toUpperCase().replace(/[^A-Z0-9-]/g, "");
+  const slugBase = cleanName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const slug = `${slugBase}-${Math.random().toString(36).slice(2, 6)}`;
+
+  const { data, error } = await (supabase.from("schools") as any)
+    .insert({
+      name: cleanName,
+      slug,
+      code: cleanCode || slugBase.slice(0, 6).toUpperCase(),
+      domain: payload.domain?.trim() || null,
+      country: payload.country?.trim() || "Rwanda",
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error creating school:", error);
+    throw error;
+  }
+  return data as SchoolRow;
+}
+
+export async function fetchProfilesBySchool(schoolId: string): Promise<ProfileRow[]> {
+  const { data, error } = await (supabase.from("profiles") as any)
+    .select("*")
+    .eq("school_id", schoolId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching school members:", error);
+    throw error;
+  }
+  return (data || []) as ProfileRow[];
+}
+
+// ==============================================================================
+// 2C. ACADEMIC COURSES / PROGRAMS
+// ==============================================================================
+export async function fetchCoursesBySchool(schoolId: string): Promise<CourseRow[]> {
+  const { data, error } = await (supabase.from("courses") as any)
+    .select("*")
+    .eq("school_id", schoolId)
+    .order("code", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching courses:", error);
+    throw error;
+  }
+  return (data || []) as CourseRow[];
+}
+
+export async function createCourse(payload: {
+  school_id: string;
+  code: string;
+  name: string;
+  academic_year: string;
+  description?: string;
+  credits?: number;
+}): Promise<CourseRow> {
+  const { data, error } = await (supabase.from("courses") as any)
+    .insert({
+      school_id: payload.school_id,
+      code: payload.code.trim().toUpperCase(),
+      name: payload.name.trim(),
+      academic_year: payload.academic_year.trim(),
+      description: payload.description?.trim() || null,
+      credits: payload.credits ?? 10,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error creating course:", error);
+    throw error;
+  }
+  return data as CourseRow;
+}
+
+export async function fetchResourcesBySchool(schoolId: string): Promise<ResourceRow[]> {
+  const { data, error } = await (supabase.from("resources") as any)
+    .select("*")
+    .eq("school_id", schoolId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching school resources:", error);
+    throw error;
+  }
+  return (data || []) as ResourceRow[];
+}
+
+export async function createSchoolResource(payload: {
+  school_id: string;
+  course_id?: string | null;
+  title: string;
+  description: string;
+  category: ResourceRow["category"];
+  course_code: string;
+  course_name: string;
+  academic_year: string;
+  file_type: ResourceRow["file_type"];
+  file_size?: string;
+  file_path?: string | null;
+  download_url: string;
+  uploaded_by: string;
+  uploaded_by_id: string;
+  target_lecturer?: string | null;
+  target_module?: string | null;
+  approved?: boolean;
+}): Promise<ResourceRow> {
+  const { data, error } = await (supabase.from("resources") as any)
+    .insert({
+      school_id: payload.school_id,
+      course_id: payload.course_id || null,
+      title: payload.title.trim(),
+      description: payload.description.trim(),
+      category: payload.category,
+      course_code: payload.course_code.trim().toUpperCase(),
+      course_name: payload.course_name.trim(),
+      academic_year: payload.academic_year.trim(),
+      file_type: payload.file_type,
+      file_size: payload.file_size || "1.2 MB",
+      file_path: payload.file_path || null,
+      download_url: payload.download_url.trim(),
+      uploaded_by: payload.uploaded_by,
+      uploaded_by_id: payload.uploaded_by_id,
+      target_lecturer: payload.target_lecturer || null,
+      target_module: payload.target_module || null,
+      approved: payload.approved ?? false,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error creating school resource:", error);
+    throw error;
+  }
+  return data as ResourceRow;
+}
+
+export async function setResourceApproval(id: string, approved: boolean): Promise<ResourceRow> {
+  const { data, error } = await (supabase.from("resources") as any)
+    .update({ approved })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error updating resource approval:", error);
+    throw error;
+  }
+  return data as ResourceRow;
 }
 
 // ==============================================================================

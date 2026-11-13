@@ -6,176 +6,230 @@
 import React from "react";
 import { useWorkspace } from "./WorkspaceContext";
 import { WorkspaceEmptyState } from "./WorkspaceEmptyState";
-import { DocCategory, FacultyDocument } from "./workspaceTypes";
-
-const CATEGORIES: ("All" | DocCategory)[] = [
-  "All",
-  "Syllabus",
-  "Accreditation Record",
-  "Curriculum Framework",
-  "Lecture Packet"
-];
-
-const STATUSES = ["All", "Verified", "Under Review", "Archived"];
 
 export const FacultyDocsLedger: React.FC = () => {
   const {
     filteredDocuments,
-    setSelectedDoc,
-    setIsPublishModalOpen,
+    activeSchool,
     searchQuery,
     setSearchQuery,
     selectedCategoryFilter,
     setSelectedCategoryFilter,
     selectedStatusFilter,
     setSelectedStatusFilter,
-    activeTenant
+    setSelectedDoc,
+    setIsPublishModalOpen,
   } = useWorkspace();
+
+  const categories = ["All", "Syllabus", "Notes", "Past Paper", "Reference Book", "Lab Report"];
+  const statuses = ["All", "Verified", "Under Review"];
+
+  const handleResetFilters = () => {
+    setSearchQuery("");
+    setSelectedCategoryFilter("All");
+    setSelectedStatusFilter("All");
+  };
 
   return (
     <div className="space-y-6">
-      
-      {/* Ledger Header & Action Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border)] pb-6">
+      {/* Header */}
+      <div className="border-b border-[var(--border)] pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <span className="text-[10px] font-semibold tracking-wider uppercase text-[var(--accent)] block mb-1">
-            Institutional Vault Ledger &bull; {activeTenant.code}
+            Academic Library &bull; {activeSchool.code}
           </span>
-          <h1 className="font-sans text-3xl sm:text-4xl font-semibold text-[var(--ink)] tracking-tight">
+          <h1 className="font-sans text-3xl sm:text-4xl font-bold text-[var(--ink)] tracking-[-0.03em]">
             Faculty Documentation & Syllabi
           </h1>
           <p className="text-xs text-[var(--ink-muted)] mt-1 max-w-2xl">
-            Central repository of accredited course syllabi, curriculum frameworks, and faculty compendiums. Officially verified and private to {activeTenant.name}.
+            Official course syllabi, lecture notes, past papers, and lab guides published for {activeSchool.name}.
           </p>
         </div>
 
         <button
           type="button"
           onClick={() => setIsPublishModalOpen(true)}
-          className="btn-accent px-5 py-2.5 text-xs font-semibold rounded-none cursor-pointer self-start sm:self-auto shrink-0 shadow-xs"
+          className="btn-accent px-5 py-2.5 text-xs font-semibold rounded-none cursor-pointer self-start sm:self-auto shrink-0"
         >
-          + Publish Documentation
+          + Publish Resource
         </button>
       </div>
 
-      {/* Filter and Search Bar */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-3 border border-[var(--border)] bg-[var(--surface)] p-3">
-        
-        {/* Search input */}
-        <div className="md:col-span-6 relative">
+      {/* Filter & Search Bar */}
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-[var(--surface)] border border-[var(--border)] p-4">
+        <div className="flex-1 min-w-0">
+          <label htmlFor="doc-search" className="sr-only">
+            Search academic documents
+          </label>
           <input
+            id="doc-search"
             type="text"
-            aria-label="Search faculty documentation"
-            placeholder="Search by course title, code (e.g. ROB-401), author, or program..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full border border-[var(--border)] bg-[var(--bg)] text-[var(--ink)] text-xs px-3.5 py-2.5 outline-none focus:border-[var(--accent)]"
+            placeholder="Search by title, course code, course name, or uploader..."
+            className="w-full min-h-[44px] sm:min-h-0 border border-[var(--border)] bg-[var(--bg)] text-[var(--ink)] px-3.5 py-2 text-xs outline-none focus:border-[var(--accent)]"
           />
         </div>
 
-        {/* Category filter tabs */}
-        <div className="md:col-span-4 flex items-center gap-1 overflow-x-auto text-xs">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setSelectedCategoryFilter(cat)}
-              className={`px-3 py-2 border transition-colors cursor-pointer whitespace-nowrap text-xs ${
-                selectedCategoryFilter === cat
-                  ? "border-[var(--accent)] bg-[var(--bg)] text-[var(--ink)] font-semibold"
-                  : "border-transparent text-[var(--ink-muted)] hover:text-[var(--ink)] hover:bg-[var(--bg)]"
-              }`}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2 text-xs">
+            <label htmlFor="category-filter" className="text-[var(--ink-muted)] font-medium">
+              Category:
+            </label>
+            <select
+              id="category-filter"
+              value={selectedCategoryFilter}
+              onChange={(e) => setSelectedCategoryFilter(e.target.value)}
+              className="min-h-[44px] sm:min-h-0 border border-[var(--border)] bg-[var(--bg)] text-[var(--ink)] px-2.5 py-1.5 text-xs outline-none focus:border-[var(--accent)]"
             >
-              {cat}
-            </button>
-          ))}
-        </div>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Status Filter */}
-        <div className="md:col-span-2">
-          <select
-            value={selectedStatusFilter}
-            onChange={(e) => setSelectedStatusFilter(e.target.value)}
-            aria-label="Filter documentation by approval status"
-            className="w-full border border-[var(--border)] bg-[var(--bg)] text-[var(--ink)] text-xs px-3 py-2 outline-none focus:border-[var(--accent)]"
-          >
-            {STATUSES.map((st) => (
-              <option key={st} value={st}>
-                Status: {st}
-              </option>
-            ))}
-          </select>
+          <div className="flex items-center gap-2 text-xs">
+            <label htmlFor="status-filter" className="text-[var(--ink-muted)] font-medium">
+              Status:
+            </label>
+            <select
+              id="status-filter"
+              value={selectedStatusFilter}
+              onChange={(e) => setSelectedStatusFilter(e.target.value)}
+              className="min-h-[44px] sm:min-h-0 border border-[var(--border)] bg-[var(--bg)] text-[var(--ink)] px-2.5 py-1.5 text-xs outline-none focus:border-[var(--accent)]"
+            >
+              {statuses.map((st) => (
+                <option key={st} value={st}>
+                  {st}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-
       </div>
 
-      {/* Ledger Table */}
+      {/* Data Table */}
       {filteredDocuments.length === 0 ? (
         <WorkspaceEmptyState
-          title="No Matching Documentation Found"
-          description={`Zero documents match the current filter criteria under ${activeTenant.name}. You may adjust search queries or upload a new syllabus.`}
-          actionLabel="Publish New Syllabus"
-          onAction={() => setIsPublishModalOpen(true)}
+          title="No matching documents found"
+          description="No resources match your current filters, or no documents have been published yet for this university."
+          actionLabel={searchQuery || selectedCategoryFilter !== "All" || selectedStatusFilter !== "All" ? "Reset All Filters" : "Publish First Document"}
+          onAction={searchQuery || selectedCategoryFilter !== "All" || selectedStatusFilter !== "All" ? handleResetFilters : () => setIsPublishModalOpen(true)}
         />
       ) : (
-        <div className="border border-[var(--border)] bg-[var(--bg)] overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
+        <>
+          {/* Mobile Adaptive Card List */}
+          <div className="md:hidden space-y-3">
+            {filteredDocuments.map((doc) => (
+              <div
+                key={doc.id}
+                onClick={() => setSelectedDoc(doc)}
+                className="border border-[var(--border)] bg-[var(--bg)] p-4 space-y-3 cursor-pointer hover:border-[var(--accent)] transition-colors"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-bold tabular-nums text-[var(--ink)]">
+                    {doc.course_code}
+                  </span>
+                  <span
+                    className={`inline-block px-2 py-0.5 text-[11px] font-semibold border ${
+                      doc.approved
+                        ? "border-[var(--accent)] text-[var(--accent)] bg-[var(--surface)]"
+                        : "border-[var(--border)] text-[var(--ink-muted)] bg-[var(--surface)]"
+                    }`}
+                  >
+                    {doc.approved ? "Verified" : "Under Review"}
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="font-sans text-sm font-semibold text-[var(--ink)] leading-snug">
+                    {doc.title}
+                  </h3>
+                  <p className="text-xs text-[var(--ink-muted)] mt-1">
+                    {doc.course_name} &bull; {doc.academic_year}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[var(--border)] text-xs">
+                  <div className="flex items-center gap-2 text-[var(--ink-muted)]">
+                    <span className="border border-[var(--border)] bg-[var(--surface)] px-2 py-0.5 text-[11px] font-medium text-[var(--ink)]">
+                      {doc.category}
+                    </span>
+                    <span className="truncate max-w-[140px]">{doc.uploaded_by}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedDoc(doc);
+                    }}
+                    className="min-h-[44px] inline-flex items-center text-[var(--accent)] font-semibold hover:underline cursor-pointer"
+                  >
+                    Inspect &rarr;
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tablet & Desktop Data Table */}
+          <div className="hidden md:block border border-[var(--border)] bg-[var(--bg)] overflow-x-auto">
+            <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="border-b border-[var(--border)] bg-[var(--surface)] text-[var(--ink-muted)] font-semibold">
-                <th className="py-3 px-4">Code</th>
-                <th className="py-3 px-4">Document Title</th>
-                <th className="py-3 px-4">Program / Department</th>
+                <th className="py-3 px-4">Course Code</th>
+                <th className="py-3 px-4">Title</th>
+                <th className="py-3 px-4">Course Name</th>
                 <th className="py-3 px-4">Category</th>
-                <th className="py-3 px-4">Version</th>
-                <th className="py-3 px-4">Authoring Faculty</th>
-                <th className="py-3 px-4">Approval State</th>
-                <th className="py-3 px-4">Updated</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th className="py-3 px-4">Year</th>
+                <th className="py-3 px-4">Uploaded By</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4">Published</th>
+                <th className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[var(--border)]">
-              {filteredDocuments.map((doc: FacultyDocument) => (
+              {filteredDocuments.map((doc) => (
                 <tr
                   key={doc.id}
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`Open syllabus: ${doc.title}`}
                   onClick={() => setSelectedDoc(doc)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setSelectedDoc(doc);
-                    }
-                  }}
-                  className="hover:bg-[var(--surface)] transition-colors cursor-pointer group focus-visible:outline-none focus-visible:bg-[var(--surface)]"
+                  className="hover:bg-[var(--surface)] transition-colors cursor-pointer group"
                 >
                   <td className="py-3.5 px-4 font-semibold text-[var(--ink)] tabular-nums whitespace-nowrap">
-                    {doc.code}
+                    {doc.course_code}
                   </td>
-                  <td className="py-3.5 px-4">
-                    <span className="font-medium text-[var(--ink)] group-hover:text-[var(--accent)] transition-colors">
-                      {doc.title}
-                    </span>
+                  <td className="py-3.5 px-4 font-medium text-[var(--ink)] group-hover:text-[var(--accent)] transition-colors">
+                    {doc.title}
                   </td>
                   <td className="py-3.5 px-4 text-[var(--ink-muted)]">
-                    {doc.programName}
-                  </td>
-                  <td className="py-3.5 px-4 text-[var(--ink-muted)]">
-                    {doc.category}
-                  </td>
-                  <td className="py-3.5 px-4 tabular-nums text-[var(--ink)] font-medium">
-                    {doc.version}
-                  </td>
-                  <td className="py-3.5 px-4 text-[var(--ink)]">
-                    {doc.author}
+                    {doc.course_name}
                   </td>
                   <td className="py-3.5 px-4">
-                    <span className="inline-block border border-[var(--border)] bg-[var(--surface)] px-2 py-0.5 text-[11px] font-medium text-[var(--ink)]">
-                      {doc.status}
+                    <span className="border border-[var(--border)] bg-[var(--surface)] px-2 py-0.5 text-[11px] font-medium text-[var(--ink)] whitespace-nowrap">
+                      {doc.category}
                     </span>
                   </td>
                   <td className="py-3.5 px-4 tabular-nums text-[var(--ink-muted)] whitespace-nowrap">
-                    {doc.updatedAt}
+                    {doc.academic_year}
+                  </td>
+                  <td className="py-3.5 px-4 text-[var(--ink)]">
+                    {doc.uploaded_by}
+                  </td>
+                  <td className="py-3.5 px-4 whitespace-nowrap">
+                    <span
+                      className={`inline-block px-2 py-0.5 text-[11px] font-semibold border ${
+                        doc.approved
+                          ? "border-[var(--accent)] text-[var(--accent)] bg-[var(--surface)]"
+                          : "border-[var(--border)] text-[var(--ink-muted)] bg-[var(--surface)]"
+                      }`}
+                    >
+                      {doc.approved ? "Verified" : "Under Review"}
+                    </span>
+                  </td>
+                  <td className="py-3.5 px-4 tabular-nums text-[var(--ink-muted)] whitespace-nowrap">
+                    {new Date(doc.created_at).toLocaleDateString()}
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <button
@@ -184,7 +238,7 @@ export const FacultyDocsLedger: React.FC = () => {
                         e.stopPropagation();
                         setSelectedDoc(doc);
                       }}
-                      className="text-xs font-semibold text-[var(--accent)] hover:underline cursor-pointer"
+                      className="text-[var(--accent)] font-semibold hover:underline cursor-pointer"
                     >
                       Inspect &rarr;
                     </button>
@@ -193,20 +247,19 @@ export const FacultyDocsLedger: React.FC = () => {
               ))}
             </tbody>
           </table>
-        </div>
+          </div>
+        </>
       )}
 
-      {/* Ledger Pagination / Ledger Record Summary */}
+      {/* Summary Bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--ink-muted)] pt-2 border-t border-[var(--border)]">
         <div>
-          Showing <span className="font-semibold text-[var(--ink)] tabular-nums">{filteredDocuments.length}</span> verified documents in <span className="font-sans font-semibold text-[var(--ink)]">{activeTenant.name}</span> syllabus directory.
+          Showing <span className="font-semibold text-[var(--ink)] tabular-nums">{filteredDocuments.length}</span> documents in <span className="font-sans font-semibold text-[var(--ink)]">{activeSchool.name}</span>.
         </div>
         <div className="flex items-center gap-4">
-          <span>Accreditation Status: <strong className="text-[var(--ink)]">Verified</strong></span>
-          <span>Campus Storage: <strong className="text-[var(--ink)]">Secure</strong></span>
+          <span>Verified Campus Library</span>
         </div>
       </div>
-
     </div>
   );
 };
